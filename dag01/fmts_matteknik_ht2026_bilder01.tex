@@ -1,0 +1,1146 @@
+\documentclass[aspectratio=169]{beamer}
+
+\usepackage{graphicx} % Required for inserting images
+\usepackage{circuitikz}
+\usepackage{siunitx}
+\usepackage{pgfplots}
+\usepackage{subfigure}
+\usepackage{caption}
+
+\title{FMTS mätteknik HT2025\\Dag 1}
+\author{Struan Gray \\ Pererik Andreasson}
+\date{\today{}}
+
+\begin{document}
+
+\frame{
+    \maketitle
+    }
+
+\frame{
+    \begin{columns}
+        \column{0.31\textwidth}    
+            \includegraphics[width=\textwidth]{figures/struan.png}\\
+            Struan -- Fysiker.
+        \column{0.31\textwidth}    
+            \includegraphics[width=\textwidth]{figures/pererik.jpg}\\
+            Pererik -- Fysiker.
+    \end{columns}
+    }
+
+
+\frame{
+    \begin{columns}
+        \column{0.31\textwidth}    
+            \includegraphics[width=\textwidth]{figures/struan_young.png}\\
+            Struan -- Fysiker.
+        \column{0.31\textwidth}    
+            \includegraphics[width=\textwidth]{figures/snorkeldansen.png}\\
+            Pererik -- Fysiker.
+    \end{columns}
+    }
+
+
+\frame{
+    \frametitle{}
+    {\Huge Dagelev -- för nyckelkort och telefonkedja för snabba ändringar.}
+    }
+
+
+\frame{
+    \frametitle{}
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[at=(current page.center)] {
+            \includegraphics[keepaspectratio,
+                                 width=\paperwidth,
+                                 height=\paperheight]{figures/voltmeter_in_action.jpg}
+            };
+   			% Varför skall vi lära oss detta?
+			\onslide<1->{
+			\node[rotate=30, white] at (8,2){{\Huge Varför?}};
+			}
+    \end{tikzpicture}    
+    }
+
+\frame{
+    \frametitle{Lärandemedel}
+        \begin{tikzpicture}[remember picture,overlay]
+        \node[at=(current page.center)] {
+            \includegraphics[keepaspectratio,
+                                 width=\paperwidth,
+                                 height=\paperheight]{figures/anteckna.jpg}
+            };
+   			% Hur skall vi lära oss detta?
+			\node[rotate=0, white, anchor = west] at (0,1){{\Huge Anteckna!}};
+			\node[rotate=0, white, anchor = west] at (0,2){{\Huge Läromedel}};
+			\node[rotate=0, white, anchor = west] at (0,3){{\Huge Blackboard -- bb.hh.se}};
+    \end{tikzpicture}
+}
+
+\frame{
+    \frametitle{Lärandemål}
+    {\Huge
+    \begin{enumerate}
+        \item<2-> Ensam mätning inget värt.
+        \item<3-> Okalibrerat mätinstrument inget värt.
+        \item<4-> Elektriska mätningar \emph{påverkar} mätobjektet $\rightarrow$ behöver \emph{tolkas}.
+    \end{enumerate}
+    }
+}
+
+
+\frame{
+    \begin{columns}
+        \column{0.3\textwidth}    
+            \includegraphics[height=0.45\textheight]{figures/multimeter_analog.jpg}
+        \column{0.3\textwidth}<2->
+            \centering
+            \includegraphics[height=0.45\textheight]{figures/dmm.jpg}
+        \column{0.3\textwidth}<4->    
+            \includegraphics[height=0.45\textheight]{figures/powermeter.jpg}
+    \end{columns}
+    \vspace{5mm}
+    \begin{columns}
+        \column{0.5\textwidth}<3->    
+            \includegraphics[width=\textwidth]{figures/signalgenerator.jpg}
+        \column{0.5\textwidth}<3->    
+            \includegraphics[width=\textwidth]{figures/oscilloskop.jpg}
+    \end{columns}
+    }
+
+
+\frame{
+    \frametitle{Veckans plan}
+            \begin{tikzpicture}[remember picture,overlay]
+            \node[at=(current page.center)] {
+                \includegraphics[keepaspectratio,
+                                 width=\paperwidth,
+                                 height=\paperheight]{figures/veckoplan.png}
+            };
+        \end{tikzpicture}
+    }
+
+
+\begin{frame}{Schema}
+
+% =================================================
+% PARAMETERS
+% =================================================
+\newcommand{\ScheduleFontSize}{10.5} % font size in pt
+\newcommand{\ScheduleShift}{0mm}     % shift entire schedule to the left
+
+\newcommand{\CellWidth}{2.60cm}      % width of ordinary cells
+\newcommand{\CellHeight}{1.25cm}     % height of all rows
+\newcommand{\TimeWidth}{2.25cm}      % width of time column
+
+\pgfmathsetmacro{\ScheduleBaseline}{1.20*\ScheduleFontSize}
+
+\centering
+\makebox[\textwidth][c]{%
+\hspace*{-\ScheduleShift}%
+
+\begin{tikzpicture}[
+    font=\fontsize{\ScheduleFontSize pt}
+                   {\ScheduleBaseline pt}\selectfont,
+    line width=0.5pt,
+    every node/.style={inner sep=3pt}
+]
+
+% =================================================
+% COLORS
+% =================================================
+\definecolor{timecol}{RGB}{240,240,240}
+\definecolor{pcol}{RGB}{220,235,250}
+\definecolor{ecol}{RGB}{250,232,210}
+\definecolor{pecol}{RGB}{228,222,245}
+\definecolor{introcol}{RGB}{225,240,225}
+
+
+% =================================================
+% COLUMN AND ROW POSITIONS
+%
+% Change ONLY \CellWidth, \CellHeight and
+% \TimeWidth above to resize the schedule.
+% =================================================
+
+\coordinate (x0) at (0,0);
+\coordinate (x1) at ([xshift=\TimeWidth]x0);
+\coordinate (x2) at ([xshift=\CellWidth]x1);
+\coordinate (x3) at ([xshift=\CellWidth]x2);
+\coordinate (x4) at ([xshift=\CellWidth]x3);
+\coordinate (x5) at ([xshift=\CellWidth]x4);
+\coordinate (x6) at ([xshift=\CellWidth]x5);
+
+\coordinate (y0) at (0,0);
+\coordinate (y1) at ([yshift=-\CellHeight]y0);
+\coordinate (y2) at ([yshift=-\CellHeight]y1);
+\coordinate (y3) at ([yshift=-\CellHeight]y2);
+\coordinate (y4) at ([yshift=-\CellHeight]y3);
+
+
+% =================================================
+% HELPER COMMAND
+%
+% #1 = color
+% #2 = upper-left x coordinate
+% #3 = upper y coordinate
+% #4 = lower-right x coordinate
+% #5 = lower y coordinate
+% #6 = contents
+% =================================================
+
+\newcommand{\schedcell}[6]{%
+    \path[
+        draw,
+        fill=#1
+    ]
+    (#2 |- #3) rectangle (#4 |- #5);
+
+    \node[
+        anchor=north west,
+        align=left,
+        text width={\dimexpr
+            \ifx#2x0\TimeWidth\else\CellWidth\fi
+            -6pt\relax}
+    ]
+    at ([xshift=3pt,yshift=-3pt]#2 |- #3)
+    {#6};
+}
+
+
+% =================================================
+% 08.00--10.00
+% =================================================
+
+\schedcell{timecol}{x0}{y0}{x1}{y1}{08.00--10.00}
+
+\schedcell{white}{x1}{y0}{x2}{y1}{}
+
+\schedcell{pcol}{x2}{y0}{x3}{y1}{%
+    \textbf{Multimeter}\\
+    P
+}
+
+\schedcell{pcol}{x3}{y0}{x4}{y1}{%
+    \textbf{Oscilloskop}\\
+    P
+}
+
+\schedcell{ecol}{x4}{y0}{x5}{y1}{%
+    \textbf{Effektmätare}\\
+    E
+}
+
+\schedcell{pecol}{x5}{y0}{x6}{y1}{%
+    \textbf{Buffert}\\
+    P + E
+}
+
+
+% =================================================
+% 10.00--12.00
+% =================================================
+
+\schedcell{timecol}{x0}{y1}{x1}{y2}{10.00--12.00}
+
+\schedcell{white}{x1}{y1}{x2}{y2}{}
+
+\schedcell{pecol}{x2}{y1}{x3}{y2}{%
+    \textbf{Multimeter}\\[2mm]
+    P + E
+}
+
+\schedcell{pcol}{x3}{y1}{x4}{y2}{%
+    \textbf{Oscilloskop}\\
+    P
+}
+
+\schedcell{ecol}{x4}{y1}{x5}{y2}{%
+    \textbf{Effektmätare}\\
+    E
+}
+
+\schedcell{pecol}{x5}{y1}{x6}{y2}{%
+    \textbf{Avslutning}\\[2mm]
+    P + E
+}
+
+
+% =================================================
+% 13.00--15.00
+% =================================================
+
+\schedcell{timecol}{x0}{y2}{x1}{y3}{13.00--15.00}
+
+\schedcell{introcol}{x1}{y2}{x2}{y3}{%
+    \textbf{Intro P + E}\\[3mm]
+    ``Statistik''
+}
+
+\schedcell{ecol}{x2}{y2}{x3}{y3}{%
+    \textbf{Multimeter}\\
+    E
+}
+
+\schedcell{pcol}{x3}{y2}{x4}{y3}{%
+    \textbf{Oscilloskop}\\
+    P
+}
+
+\schedcell{ecol}{x4}{y2}{x5}{y3}{%
+    \textbf{Effektmätare}\\
+    E
+}
+
+
+% =================================================
+% 15.00--17.00
+% =================================================
+
+\schedcell{timecol}{x0}{y3}{x1}{y4}{15.00--17.00}
+
+\schedcell{introcol}{x1}{y3}{x2}{y4}{%
+    \textbf{Ellära P + E}\\[3mm]
+    Multimeter
+}
+
+\schedcell{ecol}{x2}{y3}{x3}{y4}{%
+    \textbf{Multimeter}\\
+    E
+}
+
+\schedcell{pcol}{x3}{y3}{x4}{y4}{%
+    \textbf{Oscilloskop}\\
+    P
+}
+
+\schedcell{ecol}{x4}{y3}{x5}{y4}{%
+    \textbf{Effektmätare}\\
+    E
+}
+
+\end{tikzpicture}%
+\hspace*{\ScheduleShift}%
+}
+
+\end{frame}
+
+\frame{
+    \frametitle{Dagens plan}
+    {\huge
+        \begin{itemize}
+            \item Mäta längden på en briotågbanerälsbit och låtsas förstå statistik.
+            \item Repetera ellära.
+            \item Mäta med multimeter.
+        \end{itemize}
+    }
+    }   
+
+
+\frame{
+    \frametitle{Gruppindelning}
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[at=(current page.center)]{
+            \includegraphics[keepaspectratio,
+                width=\paperwidth,
+                height=\paperheight]{figures/frekvensspektrum.png}
+            };
+    \end{tikzpicture}
+    }
+
+
+\frame{
+    \frametitle{}
+    {\Huge Oberoende mätningar}
+}
+
+
+
+\frame{
+    \frametitle{Enheter och storheter}
+    {\Large 
+    \begin{columns}
+        \column{0.6\textwidth}
+    Storhet -- något du kan mäta\\\vspace{2mm}
+    Enhet -- måttet på en storhet\\\vspace{2mm}        
+        \column{0.3\textwidth}
+            \begin{align*}
+            	\underbrace{U}_\text{Storhet}=
+	            \underbrace{234}_\text{Mätetal}
+	            \underbrace{\unit{\V}}_\text{Enhet}
+            \end{align*}
+    \end{columns}
+    \vspace{5mm}
+\onslide<2-> De sju SI-enheterna (dödssynderna)
+\begin{columns}
+\begin{column}{0.5\textwidth}
+    \begin{itemize}[label=\alert{\textbullet}]
+        \item<3-> Längd -- (m)
+    	\item<3-> Massa -- (kg)
+    	\item<3-> Tid -- (s)
+    	\item<3-> Ström -- (A)
+    	\item<3-> Temperatur -- (K)
+     \end{itemize}
+\end{column}
+\begin{column}{0.5\textwidth}
+    \begin{itemize}[label=\alert{\textbullet}]
+
+    	\item<4-> Ljusstyrka -- (cd)
+    	\item<4-> Antal molekyler -- (mol)
+    \end{itemize}
+
+\end{column}
+\end{columns}
+\vspace{5mm}
+\onslide<5->{Volt -- \unit{\kg\m\squared\per\s\cubed\per\A}}
+    }
+    }
+
+\frame{
+    \frametitle{Potensform och prefix}
+    \begin{columns}
+        \column{0.5\textwidth}
+            \begin{align*}
+                100 &= 1 \times 10 \times 10 \\
+                &= 1 \times 10^2\\
+                \onslide<2->{10000 &= 1 \times 10 \times 10 \times 10 \times 10 \\
+                &= 1 \times 10^4\\}
+                &\\
+                \onslide<3->{0.001 &= \frac{1}{10 \times 10 \times 10}\\
+                &= \frac{1}{10^3} \\
+                &= 1 \times 10^{-3}\\}
+                &\\
+                \onslide<4->{1500 &= 1.5 \times 10^{3}\\
+                0.015&= 1.5 \times 10^{-2}}
+            \end{align*}
+        \column{0.5\textwidth}
+            \onslide<5->{
+            \begin{table}
+                \centering
+                \begin{tabular}{lll}
+                    T & tera & $10^{12}$\\
+                    G & giga & $10^9$\\
+                    M & mega & $10^6$\\
+                    k & kilo & $10^3$\\
+                    - & - & $10^0$\\
+                    m & milli & $10^{-3}$\\
+                    $\mu$ & micro & $10^{-6}$\\
+                    n & nano & $10^{-9}$\\
+                    p & pico & $10^{-12}$
+                \end{tabular}
+            \end{table}
+            }
+    \end{columns}
+}
+
+\frame{
+    \frametitle{Mätningar och data}
+    \begin{columns}
+        \column{0.2\textwidth}<1->
+  \includegraphics[width=\textwidth]{figures/legofigur.png}
+        \column{0.8\textwidth}<2->
+	\begin{tikzpicture}
+		\begin{axis}[
+			xlabel={Mätning (nummer)},
+			ylabel={Figurhöjd (\unit{\cm})},
+			xmin=-2,
+			xmax=201,
+			ymin=2.7,
+			ymax=5.3,
+			width=90mm,
+			every axis y label/.style={
+            at={(ticklabel cs:0.5)},rotate=90,anchor=near ticklabel,
+        },
+			]
+			\addplot [only marks] table [col sep=comma] {data/legofigurdata_20240811.csv} ;
+		\end{axis}
+	\end{tikzpicture}
+    \end{columns}
+    }
+
+
+\frame{
+    \frametitle{Mätningar och data}
+    \begin{columns}
+        \column{0.2\textwidth}
+  \includegraphics[width=\textwidth]{figures/legofigur.png}
+        \column{0.8\textwidth}
+    \begin{tikzpicture}
+		\begin{axis}[
+			xlabel={Figurhöjd (\unit{\cm})},
+			ylabel={Antal mätningar},
+			width=90mm,
+			every axis y label/.style={
+            at={(ticklabel cs:0.5)},rotate=90,anchor=near ticklabel,},
+			]
+			\addplot [hist={bins=10}] table [col sep=comma] {data/legofigurdata_20240811.csv} ;
+		\end{axis}
+	\end{tikzpicture}
+    \end{columns}
+    }
+
+
+\frame{
+    \frametitle{Mätfel -- noggrannhet}
+    \begin{columns}
+    \column{0.6\textwidth}
+    	\begin{tikzpicture}
+		\begin{axis}[
+			xlabel={Mätvärde (t.ex. figurhöjd)},
+			ylabel={Sannolikhetsdensitet},
+            axis lines = left,
+			width=80mm,
+            xmax = 8,
+            xmin = -4,
+            ymax = 150,
+            xtick=\empty,
+            ytick=\empty,
+			every axis y label/.style={
+            at={(ticklabel cs:0.5)},rotate=90,anchor=near ticklabel,},
+			every axis x label/.style={
+            at={(ticklabel cs:0.5)},anchor=near ticklabel,},
+			]
+			\addplot [hist={bins=10}] table [col sep=comma] {data/legofigurdata_20240811.csv} ;
+            \draw[ultra thick] (775, -20) -- (775, 150) ;
+            \draw[ultra thick] (275, -20) -- (275, 150) ;
+            \draw[thick,<->] (275, 140) -- (775, 140) ;
+            \node[anchor = north] at (0.5*275+0.5*775, 140) {Noggrannhet} ;
+            \draw[thick,<->] (600, 50) -- (960, 50) ;
+            \node[anchor = south] at (0.5*600+0.5*960, 50) {Precision} ;
+		\end{axis}
+            \node at (1.5, 5.75) {''Sant''} ;
+            \node at (4.2, 5.75) {Uppmätt} ;
+	\end{tikzpicture}
+    \column{0.3\textwidth}
+    \begin{itemize}
+        \item<2-> \qty{100.0}{\V}-skala, \qty{2}{\percent} fel (relativt fel)
+        \item<3-> ''sanna'' värdet \qtyrange{98.0}{102.0}{\V}
+        \item<4-> Måste kalibreras!
+        \item<5-> Precision -- hur ''likt'' instrument mäter    
+    \end{itemize}
+    \end{columns}
+}
+
+
+\frame{
+    \frametitle{}
+    {\Huge Dags att mäta briotågbaneräls.}
+}
+
+
+\frame{
+    \frametitle{Första uppgiften}
+    {\Large
+    \begin{columns}
+        \column{0.6\textwidth}
+        Mät längden på rälsen i enheten ''mätstickor''.\\
+        \vspace{5mm}
+        \onslide<2->{
+        Vad vi skall lära oss:}
+        \begin{itemize}
+            \item<2-> Oberoende mätningar
+            \item<3-> Mätstandarder
+            \item<4-> Normalfördelning (hoppas)
+            \item<5-> Kalibrering 
+        \end{itemize}
+    
+        \column{0.4\textwidth}
+        \includegraphics[angle=90, width = \textwidth]{figures/brio_matsticka.JPG}
+    \end{columns}
+    }
+}
+
+
+\frame{
+    \frametitle{Första uppgiften}
+    {\Large
+    \begin{columns}
+        \column{0.6\textwidth}
+        Mät längden på rälsen i enheten ''mätstickor''.\\
+        \vspace{5mm}
+        Gör allt individuellt (inte titta på någon annan)
+        \begin{itemize}
+            \item Bestäm bäst mätmetod. Skriv upp hur ni gör!
+            \item Mät i hela stickor och tiondelsstickor.
+            \item Spara resultatet och meddela mig
+        \end{itemize}
+    
+        \column{0.4\textwidth}
+        \includegraphics[angle=90, width = \textwidth]{figures/brio_matsticka.JPG}
+    \end{columns}
+    }
+}
+
+\frame{
+\frametitle{Medelvärde och kalibrering}
+\centering
+\includegraphics[width=0.8\textwidth]{figures/brio_matsticka.JPG}\\
+Medelvärdet är:
+\[\bar{x}=\frac{x_1 + x_2 + x_3 + \ldots + x_n}{n}=\]
+\onslide<2->{
+    Hur noggranna är era mätstickor?
+}
+}
+
+\frame{
+\frametitle{Mätfel -- noggrannhet}
+    	\begin{tikzpicture}
+		\begin{axis}[
+			xlabel={Mätvärde (t.ex. rälslängd)},
+			ylabel={Sannolikhetsdensitet},
+            axis lines = left,
+			width=80mm,
+            xmax = 8,
+            xmin = -4,
+            ymax = 150,
+            xtick=\empty,
+            ytick=\empty,
+			every axis y label/.style={
+            at={(ticklabel cs:0.5)},rotate=90,anchor=near ticklabel,},
+			every axis x label/.style={
+            at={(ticklabel cs:0.5)},anchor=near ticklabel,},
+			]
+			\addplot [hist={bins=10}] table [col sep=comma] {data/legofigurdata_20240811.csv} ;
+            \draw[ultra thick] (775, -20) -- (775, 150) ;
+            \draw[ultra thick] (275, -20) -- (275, 150) ;
+            \draw[thick,<->] (275, 140) -- (775, 140) ;
+            \node[anchor = north] at (0.5*275+0.5*775, 140) {Noggrannhet} ;
+            \draw[thick,<->] (600, 50) -- (960, 50) ;
+            \node[anchor = south] at (0.5*600+0.5*960, 50) {Precision} ;
+		\end{axis}
+            \node at (1.5, 5.75) {''Sant''} ;
+            \node at (4.2, 5.75) {Uppmätt - medelvärde} ;
+	\end{tikzpicture}
+}
+
+\frame{
+    \frametitle{}
+    {\huge 
+    Nu borde ni ha en bra motivering för:
+    \begin{itemize}
+        \item Mätstandarder (arbetsordrar)
+        \item Kalibrering
+    \end{itemize}
+    }
+}
+
+
+\frame{
+    \frametitle{}
+    {\Huge Dags att komma till ström!}
+}
+
+
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+\begin{frame}[fragile]{Ström - vad är det?}
+    \begin{columns}
+    \begin{column}{0.5\textwidth}
+        \begin{block}{(Gammal) definition på ström}
+            Två oändligt långa, parallella ledare \qty{1}{\m} isär som påverkar varandra med \qty{0.2}{\micro\N} per meter bär strömmen \qty{1}{\A}.
+        \end{block}
+        (2019 byttes denna definition.)
+    \end{column}
+    \begin{column}{0.5\textwidth}
+            \includegraphics[width = \textwidth]{figures/stromdef.png}\\
+    \end{column}
+    \end{columns}
+\end{frame}
+
+
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+\begin{frame}[fragile]{Ström och laddning}
+    \begin{center}
+        \includegraphics[width = 0.7\textwidth]{figures/stromdef2.png}\\       \begin{block}{Praktisk definition på ström}
+        1 Coulomb, \qty{1}{\coulomb}, är den laddning som strömmen \qty{1}{\A} transporterar under \qty{1}{\s}.
+        \end{block}
+    \end{center}
+    \begin{itemize}
+        \item<2-> Elektronens laddning: $e=\qty{1.602e-19}{\coulomb}$
+        \item<3-> \alert{Observera:} Strömmen och elektronerna går åt olika håll!
+    \end{itemize}
+    \vspace{5mm}
+    \begin{columns}
+    \begin{column}{0.5\textwidth}
+        \onslide<4->{
+        \[ I = \frac{\Delta Q}{\Delta t} \]
+        }
+        \onslide<5->{
+        \[ Q = I \Delta t \]
+        }
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \onslide<4->{
+        \[ \qty{1}{\A} = \qty{1}{\coulomb/\s} \]
+        }
+        \onslide<5->{
+        \[ \qty{1}{\coulomb} = \qty{1}{\A\s} \,(\unit{\A\hour}) \]
+        }
+    \end{column}
+    \end{columns}
+    \vspace{20mm}
+\end{frame}
+
+
+%%--------------------------------------------------
+%% Ny frame -- nytt innehåll HT2024 samt FMTS
+%%--------------------------------------------------
+\begin{frame}[fragile]{Att driva ström, ledningsförmåga och Ohms lag}
+Olika \emph{ledningsförmåga} (material). \\
+''Energi'' driver ström, \emph{spänning} $U$ mäts i \emph{Joule/Coulomb}, eller volt, \unit{\V} 
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{.5\textwidth}
+\centering
+ \begin{tikzpicture}[american]
+		\draw (3, 0) to[R=$R$, v=$U$, i=$I$, o-o] (0, 0) ;
+\end{tikzpicture}\end{minipage}}
+
+\begin{columns}
+	\begin{column}{0.45\textwidth}
+		\begin{itemize}
+			\item<2->Ledningsförmåga $G=\frac{I}{U}$, mäts i \emph{siemens}, \unit{\siemens}
+			\item<3->Motstånd $R = \frac{1}{G}$, mäts i \emph{ohm}, \unit{\ohm}. Eller som grundenheter: \unit{\kg\m\squared\per\s\cubed\per\A\squared} %\kg\m^2\s^{−3}A^{−2}}$ 
+		\end{itemize}	
+	\end{column}
+	\begin{column}{0.45\textwidth}
+		\begin{itemize}
+			\item<4->Ohms lag {\huge$U=RI$}
+			\item<5->Vanligast med motstånd, men ledningsförmåga förekommer.
+		\end{itemize}
+        \vspace{10mm}
+	\end{column}
+\end{columns}
+\end{frame}
+
+%%--------------------------------------------------
+%% Ny frame -- nytt innehåll HT2024 samt FMTS
+%%--------------------------------------------------
+\frame{
+\frametitle{Att driva ström -- krävs energi -- $U=RI$}
+    {\Large
+    \begin{columns}
+        \column{0.6\textwidth}
+    Ström är transport av laddningar.
+    \onslide<2->{ \[\text{Spänning} = \frac{\text{Effekt}}{\text{Ström}}\]}
+    \onslide<3->{ \[\text{Spänning} = \frac{\text{Potentiell energi}}{\text{Laddning}}\]}
+    \onslide<4->{ \[ P = U I \] }
+        \column{0.4\textwidth}
+    \centering
+    \onslide<5->{\qty{75}{\W}\\}
+    \onslide<6->{
+    \includegraphics[width=0.75\textwidth]{figures/glodlampa.jpg}
+    }
+    \end{columns}
+    }
+}
+
+\frame{
+\frametitle{Ohms lag och resistans}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{.5\textwidth}
+\centering
+\begin{tikzpicture}[scale = 1, american]
+    \draw (0, 0) 
+    to[american voltage source=\qty{25}{\V}, invert] (0, 2) 
+    -- (2, 2) 
+    to[R=\qty{50}{\ohm}, i=$I$] (2, 0) 
+    -- (0, 0) 
+    node[ground] {};
+\end{tikzpicture}\\
+Bestäm strömmen $I$ ovan.
+\end{minipage}}
+}
+
+
+\frame{
+\frametitle{Ohms lag och resistans}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{.5\textwidth}
+\centering
+\begin{tikzpicture}[scale = 1, american]
+    \draw (0, 0) 
+    node[ground] {}
+    to[american voltage source=\qty{25}{\V}, invert] (0, 2) 
+    -- (2, 2) 
+    to[R=\qty{50}{\ohm}, i=$I$] (2, 0)
+    node[ground] {}
+    ;
+\end{tikzpicture}\\
+Bestäm strömmen $I$ ovan.
+\end{minipage}}
+}
+
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+\begin{frame}[fragile]{Mer om potential (och nu kretsar)}
+  \begin{columns}
+    \column{0.3\textwidth}
+    \begin{center}
+    \includegraphics[width=0.8\textwidth]{figures/idealledare.png}\\
+    \onslide<2->{
+      \includegraphics[width=0.8\textwidth]{figures/komponent.png}\\
+    }
+    \onslide<3->{
+      \includegraphics[width=0.5\textwidth]{figures/jord.png}
+    }
+    \end{center}
+    \column{0.2\textwidth}
+    Ideal ledare\\
+    \vspace{12mm}
+    \onslide<2->{
+      Elektrisk komponent\\
+    }
+    \vspace{12mm}
+    \onslide<3->{
+      Jord ($V=\qty{0}{\V}$)
+    }
+    \column{0.5\textwidth}
+    \onslide<4->{
+      \includegraphics[width=\textwidth]{figures/krets.png}\\
+    }
+    \onslide<5->{
+    Tar ut energi $V<\qty{0}{\V}$, last (\textit{load})\\
+    Ger energi $V>\qty{0}{\V}$, källa (\textit{source})
+    }
+  \end{columns}
+\end{frame}
+
+
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+\begin{frame}[fragile]{Mer om potential (och nu kretsar)}
+  \begin{columns}
+    \column{0.6\textwidth}
+    \Large
+      Potentialvandring\\ \vfill
+      \onslide<2->{
+        $V_{\mathrm{jord}}\equiv 0$ \hspace{2mm}
+        \includegraphics[width=0.1\textwidth]{figures/jord.png} \hspace{2mm}
+        Jord!\\ \vfill
+      }
+      
+      \onslide<3->{
+        $V_B=\qty{0}{\volt}-\SI{4}{\volt}$\\ \vfill
+      }
+      
+      \onslide<4->{
+        $V_A=\qty{0}{\volt}+\SI{10}{\volt}$\\ \vspace{5mm}
+      }
+    \onslide<5->{\Large
+      Spänning (voltmeter) } 
+    
+      
+    \column{0.4\textwidth}
+    \onslide<1->{
+      \includegraphics[width=\textwidth]{figures/krets.png}
+    }
+  \end{columns}
+  {\huge
+  \onslide<6->{
+        $U_{AB}=V_A-V_B$} \onslide<7->{ $ =\qty{10}{\volt}-\left(-\qty{4}{\volt}\right)
+        =\qty{14}{\V}$
+    }}
+\end{frame}
+
+
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+\begin{frame}[fragile]{Strömmar i kretsar}
+  \begin{columns}
+    \column{0.4\textwidth}
+    \includegraphics[width=\textwidth]{figures/krets_qucs.png}
+    \column{0.6\textwidth}
+    \Large
+    \begin{itemize}[label=\alert{\textbullet}] % specificera label för
+    \item<1-> Laddning \alert{bevarad.}
+    \item<1-> Strömmar går vidare (eller inte alls).
+    \item<3-> \alert{\emph{In mot}} knut -- positiva
+    \item<3-> \alert{\emph{Ut från}} knut -- negativa
+    \end{itemize}
+    \onslide<2->{
+      $\sum I_i =0$
+    }
+    
+  \end{columns}
+%  \vspace{5mm}
+  \begin{columns}
+  	\column{0.1\textwidth}
+    \column{0.4\textwidth}
+    \onslide<2->{
+      \includegraphics[width=0.7\textwidth]{figures/stromknut_arne.png}
+    }
+    \column{0.5\textwidth}
+    \Large
+    \onslide<4->{
+      \[I_1+I_2-I_3=0\]
+    }
+  \end{columns}
+\end{frame}
+
+
+\frame{
+    \frametitle{}
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[at=(current page.center)] {
+            \includegraphics[keepaspectratio,
+                                 width=\paperwidth,
+                                 height=\paperheight]{figures/simpson_valjare.JPG}
+            };
+    \end{tikzpicture}    
+    }
+
+
+
+
+
+\frame{
+    \frametitle{}
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[at=(current page.center)] {
+            \includegraphics[keepaspectratio,
+                                 width=\paperwidth,
+                                 height=\paperheight]{figures/multimeter_probes_voltage.png}
+            };
+   			% Varför skall vi lära oss detta?
+			\onslide<1->{
+			\node[rotate=30, white] at (6,2){{\Huge Ganska säkert!}};
+			}
+    \end{tikzpicture}    
+    }
+
+
+\frame{
+    \frametitle{}
+    \begin{tikzpicture}[remember picture,overlay]
+        \node[at=(current page.center)] {
+            \includegraphics[keepaspectratio,
+                                 width=\paperwidth,
+                                 height=\paperheight]{figures/multimeter_probes_current.jpg}
+            };
+   			% Varför skall vi lära oss detta?
+			\onslide<1->{
+			\node[rotate=30, white] at (3,0.5){{\Huge  Osäkert! Varning!}};
+			}
+    \end{tikzpicture}    
+    }
+
+
+\frame{
+\frametitle{Mäta spänning}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{.5\textwidth}
+\centering
+\begin{tikzpicture}[scale = 1, american]
+    \draw (0, 0) 
+    node[ground] {}
+    to[american voltage source=\qty{25}{\V}, invert] (0, 2) 
+    -- (2, 2) 
+    to[R=\qty{50}{\ohm}, i=$I$] (2, 0)
+	-- (0, 0)
+    ;
+    \draw (2, 2) 
+    to[short,*-] (4, 2) 
+    to[voltmeter] (4, 0) 
+    to[short, -*] (2, 0)
+    ;
+\end{tikzpicture}\\
+Spänning \alert{över} komponenter!
+\end{minipage}}
+För stort motstånd! Räkna \qty{0.25}{\W}!
+}
+
+
+\frame{
+\frametitle{Mäta ström}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{.5\textwidth}
+\centering
+\begin{tikzpicture}[scale = 1, american]
+    \draw (0, 0) 
+    node[ground] {}
+    to[american voltage source=\qty{25}{\V}, invert] (0, 2) 
+    to[short, -*] (0.5, 2)
+    to[ammeter,-*] (2.5, 2) 
+    -- (3, 2)
+    to[R=\qty{50}{\ohm}, i=$I$] (3, 0)
+	-- (0, 0)
+    ;
+%    \draw (2, 2) 
+%    to[short,*-] (4, 2) 
+%    to[ammeter] (4, 0) 
+%    to[short, -*] (2, 0)
+%    ;
+\end{tikzpicture}\\
+Ström \alert{genom} komponenter!
+\end{minipage}}
+}
+
+
+\frame{
+\frametitle{Mäta motstånd}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}{.5\textwidth}
+\centering
+\begin{tikzpicture}[scale = 1, american]
+    \draw (2, 2) 
+    to[R=\qty{50}{\ohm}] (2, 0)
+    ;
+    \draw (2, 2) 
+    to[short, -*] (3, 2)
+    -- (4,2)
+    to[ohmmeter] (4, 0) 
+    -- (3, 0)
+    to[short, *-] (2, 0)
+    ;
+\end{tikzpicture}\\
+Koppla loss komponenter!
+\end{minipage}}
+}
+
+
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+\begin{frame}[fragile]{Strömmar i kretsar}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \alert{Parallellkoppling:} Spänning samma över resistorer!\\
+    Bestäm samtliga strömmar i kretsen.
+    \onslide<2->{
+      \[\frac{1}{R_{\mathrm{tot}}}=\frac{1}{R1}+\frac{1}{R2}+\ldots\]
+    }
+    \onslide<2->{
+      \[ R_{\mathrm{tot}} = \left(\frac{1}{R1}+\frac{1}{R2}+\ldots\right)^{-1} \]
+    }
+    
+
+    \column{0.5\textwidth}
+    \includegraphics[width=\textwidth]{figures/parallellk.png}\\
+  \end{columns}
+\end{frame}
+
+
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+\begin{frame}[fragile]{Spänningar i kretsar}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \alert{Seriekoppling:} Strömmen samma genom resistorerna!\\
+    Bestäm potentialen i $A$.
+    \onslide<2->{
+      \[R_{\mathrm{tot}}=R1+R2+\ldots\]
+    }
+    \column{0.5\textwidth}
+    \includegraphics[width=\textwidth]{figures/seriek.png}\\
+  \end{columns}
+\end{frame}
+
+
+
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+ \begin{frame}\frametitle{Spänningsdelning, lägesgivare}
+   \begin{columns}
+   \centering
+   \column{0.3\textwidth}
+   \begin{circuitikz}[american] \draw
+     node[ground]{}
+     (0, 0)  to[battery2, invert, l_=V$_1$, *-] (0,4)
+     (0, 4) -- (2, 4)
+     to[R=R$_1$] (2, 2)
+     to[R=R$_2$, v=$U_2$] (2, 0)
+     (2,0) -- (0,0)    
+ ;
+ \end{circuitikz}
+ \column{0.7\textwidth}
+     \begin{itemize}[label=\alert{\textbullet}] % specificera label
+       % beamer
+     \item<2-> Spänningsdelning, strömmen $I=\frac{V_1}{R_1+R_2}$
+       \item<3-> Spänning över $R_2$ blir då
+         $U_2=R_2\frac{V_1}{R_1+R_2}$
+         \onslide<4->{ \[U_2=V_1\frac{R_2}{R_1+R_2}\] }
+         \item<5-> \emph{Spänningsdelningslagen}
+ \end{itemize}
+ \end{columns}
+ \end{frame}
+ 
+ 
+%%--------------------------------------------------
+%% Ny frame
+%%--------------------------------------------------
+\begin{frame}\frametitle{Spänningsdelning, lägesgivare -- exempel 2.5}
+  \begin{columns}
+  \centering
+  \column{0.5\textwidth}
+  \begin{circuitikz} \draw
+    node[ground]{}
+    (0, 0)  to[battery2, invert, l_=\qty{9}{V}, *-] (0,2)
+    to[R=\qty{100}{\ohm}] (0, 4)
+    (0, 4) -- (2, 4)
+    to[R=\qty{200}{\ohm}, v=$U_{R200}$] (2, 2)
+    to[R=\qty{300}{\ohm}] (2, 0)
+    (2,0) -- (0,0)    
+;
+\end{circuitikz}
+\column{0.5\textwidth}
+Beräkna spänningen över \qty{200}{\ohm}-motståndet.\\
+% \onslide<2-> {Spänningsdelningslagen ger:}
+% \onslide<3-> {\[U_\mathrm{R200}=9\frac{200}{100+200+300}\mathrm{V}}\onslide<4->{=\qty{3}{\volt}\] }
+\vspace{30mm}
+\end{columns}
+\end{frame}
+
+
+
+\frame{
+\frametitle{}
+    {\Huge Dag 2 -- material!}
+}
+
+
+
+
+\frame{
+\frametitle{Så funkar ett vridspoleinstrument -- Simpson}
+    {\Huge Ett mätinstrument drar ström}
+}
+
+
+\frame{
+\frametitle{Så funkar ett vridspoleinstrument -- principen}
+    \includegraphics[width=\textwidth]{figures/stromslinga_i_magnetfalt.png}
+}
+
+\frame{
+\frametitle{Så funkar ett vridspoleinstrument -- ingnejörskonsten}
+    \includegraphics[width=0.45\textwidth]{figures/pmmc.png}
+    \onslide<2->{
+    \includegraphics[width=0.45\textwidth]{figures/pmmc_instrument.png}
+    }
+}
+
+\frame{
+\frametitle{Så funkar ett vridspoleinstrument -- kretsen}
+    \includegraphics[width=\textwidth]{figures/pmmc_circuit.png}
+}
+
+
+\frame{
+\frametitle{Så funkar ett vridspoleinstrument -- flera mätområden}
+    \includegraphics[width=0.8\textwidth, angle=2.5]{figures/pmmc_multirange.png}
+}
+
+
+\frame{
+\frametitle{Bygg ett vridspoleinsrument}
+}
+
+\end{document}
