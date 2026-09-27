@@ -1,0 +1,113 @@
+%\documentclass[aspectratio=169, handout]{beamer}    % For handouts.
+\documentclass[aspectratio=169]{beamer}             % For slides.
+
+\input{../../../../hh_bpa_forel-preamble}
+
+\title{FMTS mätteknik HT2026 -- Dag 1}
+\author{Pererik Andreasson \\ Struan Gray }
+\date{\today{}}
+
+\usepackage{circuitikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\begin{document}
+
+%%% Title slide: different footer, large logo
+{
+% no page #, no logo on title page
+\setbeamertemplate{footline}{}
+\setbeamertemplate{logo}{\titlelogos}
+\begin{frame}
+\vfill
+  \begin{block}
+    \maketitle
+  \end{block}
+\end{frame}
+}
+
+% Preamble:
+
+\begin{frame}{\(\sin x\)}
+    \centering
+    \begin{tikzpicture}[
+        line width=1.2pt,
+        every node/.style={font=\Large}
+    ]
+        \coordinate (A) at (0,0);
+        \coordinate (B) at (6,0);
+        \coordinate (C) at (6,3.5);
+
+        \draw (A) -- (B)
+                  -- node[right] {$a$} (C)
+                  -- node[above left] {$c$} (A);
+
+        % Right angle and angle x
+        \pic[draw, angle radius=0.35cm]
+            {right angle=A--B--C};
+        \pic[draw, "$x$", angle radius=1.1cm, angle eccentricity=1.3]
+            {angle=B--A--C};
+    \end{tikzpicture}
+
+    \bigskip
+    {\LARGE \(\displaystyle \sin x=\frac{a}{c}\)}
+\end{frame}
+
+
+\begin{frame}{The unit circle}
+    \centering
+    \begin{tikzpicture}[
+        scale=2.3,
+        line width=1.2pt,
+        every node/.style={font=\large}
+    ]
+        % Same triangle proportions as before
+        \pgfmathsetmacro{\ang}{atan(3.5/6)}
+
+        \coordinate (O) at (0,0);
+        \coordinate (P) at (\ang:1);
+        \coordinate (B) at ({cos(\ang)},0);
+
+        % Coordinate axes and unit circle
+        \draw[->, thin, gray] (-1.25,0) -- (1.3,0);
+        \draw[->, thin, gray] (0,-1.2) -- (0,1.25);
+        \draw (O) circle[radius=1];
+
+        \node[below left] at (O) {$0$};
+        \node[below right] at (1,0) {$1$};
+        \node[above left] at (0,1) {$1$};
+
+        % Inscribed right triangle
+        \draw (O) -- (B)
+                  -- node[right] {$\sin x$} (P)
+                  -- node[above left] {$1$} (O);
+
+        \pic[draw, angle radius=0.18cm]
+            {right angle=O--B--P};
+        \pic[draw, "$x$", angle radius=0.7cm,
+             angle eccentricity=1.35]
+            {angle=B--O--P};
+
+        \fill (P) circle[radius=0.025];
+    \end{tikzpicture}
+
+    \medskip
+    {\Large \(\displaystyle \sin x=\frac{a}{1}=a\)}
+\end{frame}
+
+
+\begin{frame}{Seriekopplade komponenter.}
+\begin{center}
+\resizebox{0.4\textwidth}{!}{
+\begin{tikzpicture}[american]
+	\draw (0, 0) to[sV, v<=\qty{2}{V}] (4, 0)
+		to[short] (4, 2)
+		to[C, v=$U_C$] (2, 2)
+		to[R, v=$U_R$] (0, 2)
+		to[short] (0, 0) ;
+\end{tikzpicture}
+} % end resizebox
+\end{center}
+\end{frame}
+
+\end{document}

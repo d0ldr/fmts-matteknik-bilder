@@ -1,0 +1,188 @@
+\documentclass[9pt]{extarticle}
+\usepackage[a4paper, margin=8mm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[swedish]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath, amssymb}
+\usepackage{siunitx}
+\sisetup{output-decimal-marker={,}, exponent-product=\cdot}
+\usepackage{multicol}
+\usepackage{array}
+\usepackage{xcolor}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\columnsep}{5mm}
+\setlength{\columnseprule}{0.3pt}
+\renewcommand{\arraystretch}{2.0}
+\usepackage{needspace}
+
+% group heading
+\newcommand{\grp}[1]{%
+  \par\needspace{7\baselineskip}\vspace{4pt}%
+  \colorbox{black!12}{\makebox[\dimexpr\linewidth-2\fboxsep][l]{\bfseries #1}}%
+  \par\vspace{1pt}}
+
+% formula table: name | formula
+\newenvironment{ftab}
+  {\begin{tabular}{@{}>{\footnotesize\color{black!70}\raggedright\arraybackslash}m{17mm}@{\hspace{1.5mm}}>{$}m{\dimexpr\linewidth-18.5mm\relax}<{$}@{}}}
+  {\end{tabular}\par}
+
+\begin{document}
+
+\begin{center}
+  {\large\bfseries FMTS mätteknik -- formelblad}
+\end{center}
+\vspace{-2mm}
+
+\begin{multicols}{3}
+
+% ------------------------------------------------------------------
+\grp{Prefix och konstanter}
+{\renewcommand{\arraystretch}{1.15}%
+\begin{tabular}{@{}lll@{\hspace{6mm}}lll@{}}
+T & tera  & $10^{12}$ & m     & milli & $10^{-3}$\\
+G & giga  & $10^{9}$  & $\mu$ & mikro & $10^{-6}$\\
+M & mega  & $10^{6}$  & n     & nano  & $10^{-9}$\\
+k & kilo  & $10^{3}$  & p     & piko  & $10^{-12}$
+\end{tabular}}\par
+\begin{ftab}
+Elementar\-laddning & e = \qty{1.602e-19}{C}\\
+Permittivitet     & \varepsilon_0 = \qty{8.854e-12}{F/m}\\
+Ljushastighet     & c = \qty{3.00e8}{m/s}
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Mätvärden}
+\begin{ftab}
+Medelvärde  & \bar{x} = \dfrac{x_1 + x_2 + \dots + x_n}{n}\\
+Relativt fel & \dfrac{\Delta x}{x}
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Ström, spänning, effekt}
+\begin{ftab}
+Ström         & I = \dfrac{\Delta Q}{\Delta t}, \quad Q = I\,\Delta t\\
+Enheter       & \qty{1}{A} = \qty{1}{C/s}, \quad \qty{1}{C} = \qty{1}{A.s}\\
+Spänning      & U_{AB} = V_A - V_B, \quad V_\text{jord} \equiv 0\\
+Konduktans    & G = \dfrac{I}{U}, \quad R = \dfrac{1}{G}\\
+Ohms lag      & U = R I\\
+Effekt        & P = U I = \dfrac{U^2}{R} = R I^2
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Kretslagar}
+\begin{ftab}
+Kirchhoffs strömlag & \sum I_i = 0, \quad I_1 + I_2 - I_3 = 0\\
+Kirchhoffs spänningslag & \sum U_i = 0\\
+Serie         & R_\text{tot} = R_1 + R_2 + \dots\\
+Parallell     & \dfrac{1}{R_\text{tot}} = \dfrac{1}{R_1} + \dfrac{1}{R_2} + \dots\\
+Spännings\-delning & I = \dfrac{V_1}{R_1 + R_2}\\
+                   & U_2 = V_1\dfrac{R_2}{R_1 + R_2}
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Effektanpassning}
+\begin{ftab}
+Lastspänning  & U_L = V_t\dfrac{R_L}{R_t + R_L}\\
+Lastström      & I_L = \dfrac{V_t}{R_t + R_L}\\
+Lasteffekt    & P_L = U_L I_L = V_t^2\dfrac{R_L}{(R_t + R_L)^2}\\
+Anpassning    & R_L = R_t \;\Rightarrow\; P_{L\text{max}} = \dfrac{V_t^2}{4R_t}
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Kondensator}
+\begin{ftab}
+Kapacitans    & C = \dfrac{Q}{U}, \quad Q = C U\\
+Platt\-kondensator & C = \dfrac{A\,\varepsilon_0\varepsilon_r}{d}, \quad \varepsilon_{r,\text{luft}} = 1\\
+Parallell     & C_\text{tot} = C_1 + C_2 + \dots\\
+Serie         & \dfrac{1}{C_\text{tot}} = \dfrac{1}{C_1} + \dfrac{1}{C_2} + \dots
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{RC-krets}
+\begin{ftab}
+Tidskonstant  & \tau = R C\\
+Differential\-ekvation & \dfrac{\mathrm{d}u}{\mathrm{d}t} + \dfrac{1}{RC}\,u = 0\\
+Uppladdning   & u_C(t) = U_0\left(1 - e^{-t/RC}\right)\\
+Urladdning    & u_C(t) = U_0\, e^{-t/RC}\\
+Efter $\tau$  & u_C(\tau) \approx 0{,}63\,U_0
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Växelström}
+\begin{ftab}
+Sinus         & u(t) = \hat{u}\sin\omega t\\
+Periodtid     & T = \dfrac{1}{f}\\
+Vinkel\-frekvens & \omega = 2\pi f\\
+Topp-till-topp & U_{PP} = 2\hat{u}\\
+Resistor      & u = R\, i
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Effektivvärde (RMS)}
+\begin{ftab}
+Momentan effekt & p(t) = \dfrac{u^2(t)}{R} = \dfrac{\hat{u}^2\sin^2\omega t}{R}\\
+Sinus         & U_\text{eff} = \dfrac{\hat{u}}{\sqrt{2}}\\
+Triangel, sågtand & U_\text{eff} = \dfrac{\hat{u}}{\sqrt{3}}\\
+Fyrkant       & U_\text{eff} = \hat{u}\\
+Effekt, sinus & P = \dfrac{U_\text{eff}^2}{R} = \dfrac{\hat{u}^2}{2R}\\
+Medelriktat instrument & u_\text{RMS} = 1{,}11 \cdot |u|_m
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Reaktans}
+\begin{ftab}
+Kondensator   & X_C = \dfrac{1}{\omega C}, \quad U = X_C I\\
+              & \varphi_i - \varphi_u = +90^\circ\\
+Induktor      & X_L = \omega L, \quad U = X_L I\\
+              & \varphi_i - \varphi_u = -90^\circ\\
+$X_L = R$     & f = \dfrac{R}{2\pi L}\\
+RL-serie (visare) & U = \sqrt{U_R^2 + U_L^2}\\
+              & \tan\varphi = \dfrac{U_L}{U_R}\\
+Resonans      & X_L = X_C, \quad f_0 = \dfrac{1}{2\pi\sqrt{LC}}
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Diod}
+\begin{ftab}
+Fram-spänning  & U_D \approx \qty{0.7}{V}
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Decibel}
+\begin{ftab}
+Spänning      & U_\text{dBV} = 20\log_{10}\dfrac{U}{\qty{1}{V}}\\
+Ström         & I_\text{dBA} = 20\log_{10}\dfrac{I}{\qty{1}{A}}\\
+Effekt        & P_\text{dBW} = 10\log_{10}\dfrac{P}{\qty{1}{W}}\\
+Spännings\-förstärkning & A_\text{dB} = 20\log_{10}\dfrac{U_\text{ut}}{U_\text{in}}\\
+Effekt\-förstärkning & A_\text{dB} = 10\log_{10}\dfrac{P_\text{ut}}{P_\text{in}}\\
+Dämpning      & L_\text{dB} = -A_\text{dB}\\
+Räkneregler   & \text{dB} + \text{dB} = \text{dB}\\
+              & \text{dB} + \text{dBm} = \text{dBm}
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{dBm och dB\textmu V}
+\begin{ftab}
+dBm           & P_\text{dBm} = 10\log_{10}\dfrac{P}{\qty{1}{mW}}\\
+              & P = \qty{1}{mW} \cdot 10^{P_\text{dBm}/10}\\
+dB\textmu V   & U_\text{dB\textmu V} = 20\log_{10}\dfrac{U}{\qty{1}{\micro V}}\\
+              & U = \qty{1}{\micro V} \cdot 10^{U_\text{dB\textmu V}/20}\\
+I \qty{50}{\ohm} & U_\text{dB\textmu V} \approx P_\text{dBm} + 107\\
+Effekt        & +\qty{3}{dB} \approx 2\times P\\
+              & +\qty{10}{dB} = 10\times P\\
+Spänning      & +\qty{6}{dB} \approx 2\times U\\
+              & +\qty{20}{dB} = 10\times U
+\end{ftab}
+
+% ------------------------------------------------------------------
+\grp{Koaxialkabel}
+\begin{ftab}
+Utbrednings\-hastighet & v = \dfrac{L}{\Delta t} \approx \tfrac{2}{3}\,c
+\end{ftab}
+
+\end{multicols}
+
+\end{document}

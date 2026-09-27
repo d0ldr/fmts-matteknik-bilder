@@ -1,0 +1,22 @@
+\ifdefined\handoutmode
+  \PassOptionsToClass{handout}{beamer}
+\fi
+
+\documentclass[aspectratio=169]{beamer}
+
+\begin{document}
+
+\begin{frame}{Example}
+  Always visible.
+
+  \uncover<2->{Visible from the second overlay.}
+\end{frame}
+
+\mode<beamer>{
+    \begin{frame}
+        {\Huge This is a beamer slide.}
+    \end{frame}
+
+}
+
+\end{document}

@@ -1,126 +1,78 @@
+\ifdefined\handoutmode
+  \PassOptionsToClass{handout}{beamer}
+\fi
 \documentclass[aspectratio=169]{beamer}
 
-\usepackage{graphicx} % Required for inserting images
-\usepackage{circuitikz}
-\usepackage{siunitx}
-\usepackage{pgfplots}
-\usepackage{subfigure}
-\usepackage{caption}
+\input{../../../../hh_bpa_forel-preamble} % this is ugly.
 
-\title{FMTS mätteknik HT2025\\Dag 1}
-\author{Struan Gray \\ Pererik Andreasson}
+\title{FMTS mätteknik HT2026 -- Dag 1}
+\author{Pererik Andreasson \\ Struan Gray }
 \date{\today{}}
 
 \begin{document}
 
-\frame{
+%%% Title slide: different footer, large logo
+{
+% no page #, no logo on title page
+\setbeamertemplate{footline}{}
+\setbeamertemplate{logo}{\titlelogos}
+\begin{frame}
+\vfill
+  \begin{block}
     \maketitle
-    }
+  \end{block}
+\end{frame}
+}
 
-\frame{
+
+% Lärarpresentation - foton
+\mode<beamer>{
+    \begin{frame}
     \begin{columns}
-        \column{0.31\textwidth}    
-            \includegraphics[width=\textwidth]{figures/struan.png}\\
-            Struan -- Fysiker.
         \column{0.31\textwidth}    
             \includegraphics[width=\textwidth]{figures/pererik.jpg}\\
             Pererik -- Fysiker.
+        \column{0.31\textwidth}    
+            \includegraphics[width=\textwidth]{figures/struan.png}\\
+            Struan -- Fysiker.
     \end{columns}
-    }
+\end{frame}
+} % mode
 
-
-\frame{
-    \begin{columns}
+% Lärarpresentation - roligare foton
+\mode<beamer>{
+\begin{frame}
+        \begin{columns}
+        \column{0.31\textwidth}    
+        \includegraphics[width=\textwidth]{figures/pererik_gitarr.jpg}\\
+        Pererik -- Fysiker.
         \column{0.31\textwidth}    
             \includegraphics[width=\textwidth]{figures/struan_young.png}\\
             Struan -- Fysiker.
-        \column{0.31\textwidth}    
-            \includegraphics[width=\textwidth]{figures/snorkeldansen.png}\\
-            Pererik -- Fysiker.
     \end{columns}
-    }
+\end{frame}
+} % mode
 
+% kommando för att rita schemat (o)smidigt
+\newcommand{\schedcell}[6]{%
+    \path[
+        draw,
+        fill=#1
+    ]
+    (#2 |- #3) rectangle (#4 |- #5);
 
-\frame{
-    \frametitle{}
-    {\Huge Dagelev -- för nyckelkort och telefonkedja för snabba ändringar.}
-    }
-
-
-\frame{
-    \frametitle{}
-    \begin{tikzpicture}[remember picture,overlay]
-        \node[at=(current page.center)] {
-            \includegraphics[keepaspectratio,
-                                 width=\paperwidth,
-                                 height=\paperheight]{figures/voltmeter_in_action.jpg}
-            };
-   			% Varför skall vi lära oss detta?
-			\onslide<1->{
-			\node[rotate=30, white] at (8,2){{\Huge Varför?}};
-			}
-    \end{tikzpicture}    
-    }
-
-\frame{
-    \frametitle{Lärandemedel}
-        \begin{tikzpicture}[remember picture,overlay]
-        \node[at=(current page.center)] {
-            \includegraphics[keepaspectratio,
-                                 width=\paperwidth,
-                                 height=\paperheight]{figures/anteckna.jpg}
-            };
-   			% Hur skall vi lära oss detta?
-			\node[rotate=0, white, anchor = west] at (0,1){{\Huge Anteckna!}};
-			\node[rotate=0, white, anchor = west] at (0,2){{\Huge Läromedel}};
-			\node[rotate=0, white, anchor = west] at (0,3){{\Huge Blackboard -- bb.hh.se}};
-    \end{tikzpicture}
+    \node[
+        anchor=north west,
+        align=left,
+        text width={\dimexpr
+            \ifx#2x0\TimeWidth\else\CellWidth\fi
+            -6pt\relax}
+    ]
+    at ([xshift=3pt,yshift=-3pt]#2 |- #3)
+    {#6};
 }
 
-\frame{
-    \frametitle{Lärandemål}
-    {\Huge
-    \begin{enumerate}
-        \item<2-> Ensam mätning inget värt.
-        \item<3-> Okalibrerat mätinstrument inget värt.
-        \item<4-> Elektriska mätningar \emph{påverkar} mätobjektet $\rightarrow$ behöver \emph{tolkas}.
-    \end{enumerate}
-    }
-}
-
-
-\frame{
-    \begin{columns}
-        \column{0.3\textwidth}    
-            \includegraphics[height=0.45\textheight]{figures/multimeter_analog.jpg}
-        \column{0.3\textwidth}<2->
-            \centering
-            \includegraphics[height=0.45\textheight]{figures/dmm.jpg}
-        \column{0.3\textwidth}<4->    
-            \includegraphics[height=0.45\textheight]{figures/powermeter.jpg}
-    \end{columns}
-    \vspace{5mm}
-    \begin{columns}
-        \column{0.5\textwidth}<3->    
-            \includegraphics[width=\textwidth]{figures/signalgenerator.jpg}
-        \column{0.5\textwidth}<3->    
-            \includegraphics[width=\textwidth]{figures/oscilloskop.jpg}
-    \end{columns}
-    }
-
-
-\frame{
-    \frametitle{Veckans plan}
-            \begin{tikzpicture}[remember picture,overlay]
-            \node[at=(current page.center)] {
-                \includegraphics[keepaspectratio,
-                                 width=\paperwidth,
-                                 height=\paperheight]{figures/veckoplan.png}
-            };
-        \end{tikzpicture}
-    }
-
-
+% schemabilden (kommandot utanför annars kaputt)
 \begin{frame}{Schema}
 
 % =================================================
@@ -189,25 +141,6 @@
 % #6 = contents
 % =================================================
 
-\newcommand{\schedcell}[6]{%
-    \path[
-        draw,
-        fill=#1
-    ]
-    (#2 |- #3) rectangle (#4 |- #5);
-
-    \node[
-        anchor=north west,
-        align=left,
-        text width={\dimexpr
-            \ifx#2x0\TimeWidth\else\CellWidth\fi
-            -6pt\relax}
-    ]
-    at ([xshift=3pt,yshift=-3pt]#2 |- #3)
-    {#6};
-}
-
-
 % =================================================
 % 08.00--10.00
 % =================================================
@@ -218,22 +151,22 @@
 
 \schedcell{pcol}{x2}{y0}{x3}{y1}{%
     \textbf{Multimeter}\\
-    P
+    S
 }
 
-\schedcell{pcol}{x3}{y0}{x4}{y1}{%
+\schedcell{pecol}{x3}{y0}{x4}{y1}{%
     \textbf{Oscilloskop}\\
     P
 }
 
-\schedcell{ecol}{x4}{y0}{x5}{y1}{%
-    \textbf{Effektmätare}\\
-    E
+\schedcell{pecol}{x4}{y0}{x5}{y1}{%
+    \textbf{Oscilloskop}\\
+    P
 }
 
-\schedcell{pecol}{x5}{y0}{x6}{y1}{%
+\schedcell{introcol}{x5}{y0}{x6}{y1}{%
     \textbf{Buffert}\\
-    P + E
+    S
 }
 
 
@@ -245,24 +178,24 @@
 
 \schedcell{white}{x1}{y1}{x2}{y2}{}
 
-\schedcell{pecol}{x2}{y1}{x3}{y2}{%
-    \textbf{Multimeter}\\[2mm]
-    P + E
+\schedcell{pcol}{x2}{y1}{x3}{y2}{%
+    \textbf{Multimeter}\\
+    S
 }
 
-\schedcell{pcol}{x3}{y1}{x4}{y2}{%
+\schedcell{pecol}{x3}{y1}{x4}{y2}{%
     \textbf{Oscilloskop}\\
     P
 }
 
-\schedcell{ecol}{x4}{y1}{x5}{y2}{%
-    \textbf{Effektmätare}\\
-    E
+\schedcell{pecol}{x4}{y1}{x5}{y2}{%
+    \textbf{Oscilloskop}\\
+    P
 }
 
-\schedcell{pecol}{x5}{y1}{x6}{y2}{%
+\schedcell{introcol}{x5}{y1}{x6}{y2}{%
     \textbf{Avslutning}\\[2mm]
-    P + E
+    P + S
 }
 
 
@@ -272,24 +205,24 @@
 
 \schedcell{timecol}{x0}{y2}{x1}{y3}{13.00--15.00}
 
-\schedcell{introcol}{x1}{y2}{x2}{y3}{%
-    \textbf{Intro P + E}\\[3mm]
+\schedcell{pcol}{x1}{y2}{x2}{y3}{%
+    \textbf{Intro P + S}\\
     ``Statistik''
 }
 
-\schedcell{ecol}{x2}{y2}{x3}{y3}{%
+\schedcell{pcol}{x2}{y2}{x3}{y3}{%
     \textbf{Multimeter}\\
-    E
+    P
 }
 
-\schedcell{pcol}{x3}{y2}{x4}{y3}{%
+\schedcell{pecol}{x3}{y2}{x4}{y3}{%
     \textbf{Oscilloskop}\\
     P
 }
 
 \schedcell{ecol}{x4}{y2}{x5}{y3}{%
     \textbf{Effektmätare}\\
-    E
+    P
 }
 
 
@@ -299,24 +232,24 @@
 
 \schedcell{timecol}{x0}{y3}{x1}{y4}{15.00--17.00}
 
-\schedcell{introcol}{x1}{y3}{x2}{y4}{%
-    \textbf{Ellära P + E}\\[3mm]
+\schedcell{pcol}{x1}{y3}{x2}{y4}{%
+    \textbf{Ellära S}
     Multimeter
 }
 
-\schedcell{ecol}{x2}{y3}{x3}{y4}{%
+\schedcell{pcol}{x2}{y3}{x3}{y4}{%
     \textbf{Multimeter}\\
-    E
+    S
 }
 
-\schedcell{pcol}{x3}{y3}{x4}{y4}{%
+\schedcell{pecol}{x3}{y3}{x4}{y4}{%
     \textbf{Oscilloskop}\\
     P
 }
 
 \schedcell{ecol}{x4}{y3}{x5}{y4}{%
     \textbf{Effektmätare}\\
-    E
+    P
 }
 
 \end{tikzpicture}%
@@ -325,36 +258,75 @@
 
 \end{frame}
 
+
+\mode<beamer>{
+\begin{frame}
+    \frametitle{}
+    {\Huge Nyckelkort (sal låst) och telefonkedja (snabba ändringar).}    
+\end{frame}
+} % mode
+
+% motivering för mätteknik
+\mode<beamer>{
+\descriptionslide{figures/voltmeter_in_action.jpg}{1}
+    {Varför behöver vi förstå mätteknik?}{}
+} % mode
+
+\descriptionslide{figures/anteckna.jpg}{1}
+    {Läromedel och anteckningar}{}
+
+\handoutnoteslide{Dessa tomma rutor är till för anteckningar.}
+
+
+\begin{frame}
+    \frametitle{Lärandemål}
+    {\Huge
+    \begin{enumerate}
+        \item<2-> Ensam mätning inget värt.
+        \item<3-> Okalibrerat mätinstrument inget värt.
+        \item<4-> Elektriska mätningar \emph{påverkar} mätobjektet $\rightarrow$ behöver \emph{tolkas}.
+    \end{enumerate}
+    }
+\end{frame}
+
+\handoutnoteslide
+
+\mode<beamer>{
+\frame{
+    \begin{columns}
+        \column{0.3\textwidth}    
+            \includegraphics[height=0.45\textheight]{figures/multimeter_analog.jpg}
+        \column{0.3\textwidth}<2->
+            \centering
+            \includegraphics[height=0.45\textheight]{figures/dmm.jpg}
+        \column{0.3\textwidth}<4->    
+            \includegraphics[height=0.45\textheight]{figures/powermeter.jpg}
+    \end{columns}
+    \vspace{5mm}
+    \begin{columns}
+        \column{0.5\textwidth}<3->    
+            \includegraphics[width=\textwidth]{figures/signalgenerator.jpg}
+        \column{0.5\textwidth}<3->    
+            \includegraphics[width=\textwidth]{figures/oscilloskop.jpg}
+    \end{columns}
+    }
+} % mode
+
+
 \frame{
     \frametitle{Dagens plan}
     {\huge
         \begin{itemize}
             \item Mäta längden på en briotågbanerälsbit och låtsas förstå statistik.
+            \item Introlabba lite.
             \item Repetera ellära.
             \item Mäta med multimeter.
         \end{itemize}
     }
     }   
 
-
-\frame{
-    \frametitle{Gruppindelning}
-    \begin{tikzpicture}[remember picture,overlay]
-        \node[at=(current page.center)]{
-            \includegraphics[keepaspectratio,
-                width=\paperwidth,
-                height=\paperheight]{figures/frekvensspektrum.png}
-            };
-    \end{tikzpicture}
-    }
-
-
-\frame{
-    \frametitle{}
-    {\Huge Oberoende mätningar}
-}
-
-
+% section här skall vara kvar - annars fel på sidor nedan.
+    \sectionslide{Oberoende mätningar}
 
 \frame{
     \frametitle{Enheter och storheter}
@@ -374,7 +346,7 @@
 \onslide<2-> De sju SI-enheterna (dödssynderna)
 \begin{columns}
 \begin{column}{0.5\textwidth}
-    \begin{itemize}[label=\alert{\textbullet}]
+    \begin{itemize}
         \item<3-> Längd -- (m)
     	\item<3-> Massa -- (kg)
     	\item<3-> Tid -- (s)
@@ -383,18 +355,20 @@
      \end{itemize}
 \end{column}
 \begin{column}{0.5\textwidth}
-    \begin{itemize}[label=\alert{\textbullet}]
+    \begin{itemize}
 
     	\item<4-> Ljusstyrka -- (cd)
     	\item<4-> Antal molekyler -- (mol)
     \end{itemize}
+\vspace{5mm}
+\onslide<5->{Volt -- \unit{\kg\m\squared\per\s\cubed\per\A}}
 
 \end{column}
 \end{columns}
-\vspace{5mm}
-\onslide<5->{Volt -- \unit{\kg\m\squared\per\s\cubed\per\A}}
-    }
-    }
+    } % fontsize
+    } % frame end 
+
+\handoutnoteslide
 
 \frame{
     \frametitle{Potensform och prefix}
@@ -407,16 +381,18 @@
                 &= 1 \times 10^4\\}
                 &\\
                 \onslide<3->{0.001 &= \frac{1}{10 \times 10 \times 10}\\
-                &= \frac{1}{10^3} \\
-                &= 1 \times 10^{-3}\\}
+                &= \frac{1}{10^3}
+                = 1 \times 10^{-3}\\}
                 &\\
                 \onslide<4->{1500 &= 1.5 \times 10^{3}\\
-                0.015&= 1.5 \times 10^{-2}}
+                0.015&= 1.5 \times 10^{-2}} \onslide<5->{= \num{15e-3}}
             \end{align*}
         \column{0.5\textwidth}
-            \onslide<5->{
+            \onslide<6->{
+            
             \begin{table}
                 \centering
+            \resizebox{0.9\textwidth}{!}{
                 \begin{tabular}{lll}
                     T & tera & $10^{12}$\\
                     G & giga & $10^9$\\
@@ -428,12 +404,15 @@
                     n & nano & $10^{-9}$\\
                     p & pico & $10^{-12}$
                 \end{tabular}
+            } % resizebox
             \end{table}
-            }
+            } % onslide
     \end{columns}
 }
 
-\frame{
+\handoutnoteslide
+
+\begin{frame}
     \frametitle{Mätningar och data}
     \begin{columns}
         \column{0.2\textwidth}<1->
@@ -456,10 +435,13 @@
 		\end{axis}
 	\end{tikzpicture}
     \end{columns}
-    }
+\end{frame}
 
 
-\frame{
+\handoutnoteslide
+
+
+\begin{frame}
     \frametitle{Mätningar och data}
     \begin{columns}
         \column{0.2\textwidth}
@@ -477,13 +459,16 @@
 		\end{axis}
 	\end{tikzpicture}
     \end{columns}
-    }
+\end{frame}
 
+\handoutnoteslide
 
-\frame{
-    \frametitle{Mätfel -- noggrannhet}
+% histogram, accuracy, precision
+\begin{frame}[fragile]
+    \frametitle{M\"atfel -- noggrannhet}
     \begin{columns}
     \column{0.6\textwidth}
+    	\resizebox{\textwidth}{!}{
     	\begin{tikzpicture}
 		\begin{axis}[
 			xlabel={Mätvärde (t.ex. figurhöjd)},
@@ -500,33 +485,38 @@
 			every axis x label/.style={
             at={(ticklabel cs:0.5)},anchor=near ticklabel,},
 			]
-			\addplot [hist={bins=10}] table [col sep=comma] {data/legofigurdata_20240811.csv} ;
-            \draw[ultra thick] (775, -20) -- (775, 150) ;
-            \draw[ultra thick] (275, -20) -- (275, 150) ;
-            \draw[thick,<->] (275, 140) -- (775, 140) ;
-            \node[anchor = north] at (0.5*275+0.5*775, 140) {Noggrannhet} ;
-            \draw[thick,<->] (600, 50) -- (960, 50) ;
-            \node[anchor = south] at (0.5*600+0.5*960, 50) {Precision} ;
+			\addplot [hist={bins=10}] table [col sep=comma] {../dag01/data/legofigurdata_20240811.csv} ;
+            	
+            	\draw[ultra thick, red, visible on=<2->] (axis cs:3.75, 0) -- (3.75, 150) node[below, black] {Uppmätt} ;             	
+            	
+            	\draw[<->, ultra thick, dashed, visible on=<3->] (axis cs:2,25) -- (5.5,25) node[midway, above] {Precision} ;
+            	
+            	\draw[ultra thick, red, visible on=<4->] (axis cs:-1.1, 0) -- (-1.1, 150)  node[below, black] {''Sant''};
+
+            	\draw[<->, ultra thick, dashed, visible on=<5->] (axis cs:-1.1,100) -- (3.75,100) node[midway, above] {Noggrannhet} ;
 		\end{axis}
-            \node at (1.5, 5.75) {''Sant''} ;
-            \node at (4.2, 5.75) {Uppmätt} ;
 	\end{tikzpicture}
-    \column{0.3\textwidth}
+	} % resizebox
+    \column{0.4\textwidth}
+		{\LARGE
     \begin{itemize}
-        \item<2-> \qty{100.0}{\V}-skala, \qty{2}{\percent} fel (relativt fel)
-        \item<3-> ''sanna'' värdet \qtyrange{98.0}{102.0}{\V}
-        \item<4-> Måste kalibreras!
-        \item<5-> Precision -- hur ''likt'' instrument mäter    
+        \item<6-> \qty{100.0}{\V}-skala, \qty{2}{\percent} fel (relativt fel)
+        \item<7-> ''sanna'' värdet \qtyrange{98.0}{102.0}{\V}
+        \item<8-> Måste kalibreras!
+        \item<9-> Precision -- hur ''likt'' instrument mäter    
     \end{itemize}
+    } % fontsize
     \end{columns}
-}
+\end{frame}
 
+\handoutnoteslide
 
+\mode<beamer>{
 \frame{
     \frametitle{}
-    {\Huge Dags att mäta briotågbaneräls.}
+    {\Huge Dags att mäta briotågbaneräls. Eventuellt visar Struan andra bilder. }
 }
-
+}
 
 \frame{
     \frametitle{Första uppgiften}
@@ -545,11 +535,12 @@
         \end{itemize}
     
         \column{0.4\textwidth}
-        \includegraphics[angle=90, width = \textwidth]{figures/brio_matsticka.JPG}
+        \includegraphics[angle=90, height = 0.9\textheight]{figures/brio_matsticka.JPG}
     \end{columns}
     }
 }
 
+\handoutnoteslide
 
 \frame{
     \frametitle{Första uppgiften}
@@ -566,10 +557,12 @@
         \end{itemize}
     
         \column{0.4\textwidth}
-        \includegraphics[angle=90, width = \textwidth]{figures/brio_matsticka.JPG}
+        \includegraphics[angle=90, height = 0.9\textheight]{figures/brio_matsticka.JPG}
     \end{columns}
     }
 }
+
+\handoutnoteslide
 
 \frame{
 \frametitle{Medelvärde och kalibrering}
@@ -582,11 +575,14 @@ Medelvärdet är:
 }
 }
 
-\frame{
+\handoutnoteslide
+
+\begin{frame}
 \frametitle{Mätfel -- noggrannhet}
-    	\begin{tikzpicture}
+    \resizebox{!}{0.9\textheight}{
+    \begin{tikzpicture}
 		\begin{axis}[
-			xlabel={Mätvärde (t.ex. rälslängd)},
+			xlabel={Mätvärde (t.ex. figurhöjd)},
 			ylabel={Sannolikhetsdensitet},
             axis lines = left,
 			width=80mm,
@@ -600,18 +596,21 @@ Medelvärdet är:
 			every axis x label/.style={
             at={(ticklabel cs:0.5)},anchor=near ticklabel,},
 			]
-			\addplot [hist={bins=10}] table [col sep=comma] {data/legofigurdata_20240811.csv} ;
-            \draw[ultra thick] (775, -20) -- (775, 150) ;
-            \draw[ultra thick] (275, -20) -- (275, 150) ;
-            \draw[thick,<->] (275, 140) -- (775, 140) ;
-            \node[anchor = north] at (0.5*275+0.5*775, 140) {Noggrannhet} ;
-            \draw[thick,<->] (600, 50) -- (960, 50) ;
-            \node[anchor = south] at (0.5*600+0.5*960, 50) {Precision} ;
+			\addplot [hist={bins=10}] table [col sep=comma] {../dag01/data/legofigurdata_20240811.csv} ;
+            	
+            	\draw[ultra thick, red] (axis cs:3.75, 0) -- (3.75, 150) node[below, black] {Uppmätt} ;             	
+            	
+            	\draw[<->, ultra thick, dashed] (axis cs:2,25) -- (5.5,25) node[midway, above] {Precision} ;
+            	
+            	\draw[ultra thick, red] (axis cs:-1.1, 0) -- (-1.1, 150)  node[below, black] {''Sant''};
+
+            	\draw[<->, ultra thick, dashed] (axis cs:-1.1,100) -- (3.75,100) node[midway, above] {Noggrannhet} ;
 		\end{axis}
-            \node at (1.5, 5.75) {''Sant''} ;
-            \node at (4.2, 5.75) {Uppmätt - medelvärde} ;
 	\end{tikzpicture}
-}
+	} % resizebox
+\end{frame}
+
+\handoutnoteslide
 
 \frame{
     \frametitle{}
@@ -624,12 +623,14 @@ Medelvärdet är:
     }
 }
 
+\handoutnoteslide
 
-\frame{
-    \frametitle{}
-    {\Huge Dags att komma till ström!}
+\mode<beamer>{
+    \frame{
+        \frametitle{}
+        {\Huge Dags att komma till ström!}
+    }
 }
-
 
 %%--------------------------------------------------
 %% Ny frame
@@ -643,11 +644,58 @@ Medelvärdet är:
         (2019 byttes denna definition.)
     \end{column}
     \begin{column}{0.5\textwidth}
-            \includegraphics[width = \textwidth]{figures/stromdef.png}\\
+            %\includegraphics[width = \textwidth]{figures/stromdef.png}\\
+        \begin{tikzpicture}[
+    x=2cm, y=2cm,
+    >={Latex[length=4pt,width=4pt]},
+    every node/.style={font=\large, inner sep=0pt},
+    force/.style={
+        >={Latex[length=10pt,width=10pt]},
+        line width=2.5pt
+    }
+]
+    % Vertical conductors
+    \fill[orange!80!yellow] (1.115,0) rectangle (1.280,4.165);
+    \fill[orange!80!yellow] (2.815,0) rectangle (2.980,4.165);
+
+    % Current arrows
+    \draw[->, line width=0.6pt]
+        (1.195,3.465) -- (1.195,4.045);
+    \node[anchor=east] at (1.080,3.755) {$1\,\mathrm{A}$};
+
+    \draw[->, line width=0.6pt]
+        (2.895,4.045) -- (2.895,3.465);
+    \node[anchor=west] at (3.045,3.755) {$1\,\mathrm{A}$};
+
+    % Dashed reference lines
+    \draw[dash pattern=on 1.5pt off 2pt, line width=0.6pt]
+        (0.640,2.840) -- (3.490,2.840);
+    \draw[dash pattern=on 1.5pt off 2pt, line width=0.6pt]
+        (0.640,1.355) -- (3.490,1.355);
+
+    % One-metre length
+    \draw[<->, line width=0.6pt]
+        (2.045,1.310) -- (2.045,2.865);
+    \node[rotate=90] at (2.225,2.095) {$1\,\mathrm{m}$};
+
+    % Repulsive forces
+    \draw[force, ->]
+        (1.205,2.080) -- (0.325,2.100);
+    \node at (0.770,2.405) {\qty{0.2}{\micro\N}};
+
+    \draw[force, ->]
+        (2.900,2.080) -- (3.785,2.100);
+    \node at (3.515,2.405) {\qty{0.2}{\micro\N}};
+
+    % Horizontal separation arrow
+    \draw[<->, line width=0.6pt]
+        (1.280,0.4) -- (2.835,0.4) node[midway, above, yshift=0.2cm] {$1\,\mathrm{m}$};
+\end{tikzpicture}
     \end{column}
     \end{columns}
 \end{frame}
 
+\handoutnoteslide
 
 %%--------------------------------------------------
 %% Ny frame
@@ -684,6 +732,7 @@ Medelvärdet är:
     \vspace{20mm}
 \end{frame}
 
+\handoutnoteslide
 
 %%--------------------------------------------------
 %% Ny frame -- nytt innehåll HT2024 samt FMTS
@@ -691,29 +740,31 @@ Medelvärdet är:
 \begin{frame}[fragile]{Att driva ström, ledningsförmåga och Ohms lag}
 Olika \emph{ledningsförmåga} (material). \\
 ''Energi'' driver ström, \emph{spänning} $U$ mäts i \emph{Joule/Coulomb}, eller volt, \unit{\V} 
-\resizebox{\textwidth}{!}{%
-\begin{minipage}{.5\textwidth}
-\centering
- \begin{tikzpicture}[american]
-		\draw (3, 0) to[R=$R$, v=$U$, i=$I$, o-o] (0, 0) ;
-\end{tikzpicture}\end{minipage}}
+\begin{center}
+    \resizebox{0.45\textwidth}{!}{%
+        \begin{tikzpicture}[american]
+        	\draw (3, 0) to[R=$R$, v=$U$, i=$I$, o-o] (0, 0) ;
+        \end{tikzpicture}
+    }% resizebox
+\end{center}
 
 \begin{columns}
 	\begin{column}{0.45\textwidth}
 		\begin{itemize}
-			\item<2->Ledningsförmåga $G=\frac{I}{U}$, mäts i \emph{siemens}, \unit{\siemens}
-			\item<3->Motstånd $R = \frac{1}{G}$, mäts i \emph{ohm}, \unit{\ohm}. Eller som grundenheter: \unit{\kg\m\squared\per\s\cubed\per\A\squared} %\kg\m^2\s^{−3}A^{−2}}$ 
+			\item<2->\alert{Ledningsförmåga} $G=\frac{I}{U}$, mäts i \emph{siemens}, \unit{\siemens}
+			\item<3->\alert{Motstånd} $R = \frac{1}{G}$, mäts i \emph{ohm}, \unit{\ohm}. (Grundenheter: \unit{\kg\m\squared\per\s\cubed\per\A\squared}) %\kg\m^2\s^{−3}A^{−2}}$ 
 		\end{itemize}	
 	\end{column}
 	\begin{column}{0.45\textwidth}
 		\begin{itemize}
-			\item<4->Ohms lag {\huge$U=RI$}
-			\item<5->Vanligast med motstånd, men ledningsförmåga förekommer.
+			\item<4->\alert{Ohms lag} {\huge$U=RI$}
+			\item<5->Motstånd vanligast, ledningsförmåga förekommer.
 		\end{itemize}
-        \vspace{10mm}
 	\end{column}
 \end{columns}
 \end{frame}
+
+\handoutnoteslide
 
 %%--------------------------------------------------
 %% Ny frame -- nytt innehåll HT2024 samt FMTS
@@ -725,8 +776,8 @@ Olika \emph{ledningsförmåga} (material). \\
         \column{0.6\textwidth}
     Ström är transport av laddningar.
     \onslide<2->{ \[\text{Spänning} = \frac{\text{Effekt}}{\text{Ström}}\]}
-    \onslide<3->{ \[\text{Spänning} = \frac{\text{Potentiell energi}}{\text{Laddning}}\]}
-    \onslide<4->{ \[ P = U I \] }
+    \onslide<3->{ \[\text{Spänning} = \frac{\text{Energi}}{\text{Laddning}}\]}
+    \onslide<4->{\huge \[ P = U \cdot{} I \] }
         \column{0.4\textwidth}
     \centering
     \onslide<5->{\qty{75}{\W}\\}
@@ -737,26 +788,30 @@ Olika \emph{ledningsförmåga} (material). \\
     }
 }
 
-\frame{
-\frametitle{Ohms lag och resistans}
-\resizebox{\textwidth}{!}{%
-\begin{minipage}{.5\textwidth}
-\centering
-\begin{tikzpicture}[scale = 1, american]
-    \draw (0, 0) 
-    to[american voltage source=\qty{25}{\V}, invert] (0, 2) 
-    -- (2, 2) 
-    to[R=\qty{50}{\ohm}, i=$I$] (2, 0) 
-    -- (0, 0) 
-    node[ground] {};
-\end{tikzpicture}\\
-Bestäm strömmen $I$ ovan.
-\end{minipage}}
-}
+\handoutnoteslide
 
-
-\frame{
+\begin{frame}
 \frametitle{Ohms lag och resistans}
+\begin{center}
+
+\resizebox{0.67\textwidth}{!}{%
+    \begin{tikzpicture}[scale = 1, american]
+        \draw (0, 0) 
+        to[american voltage source=\qty{25}{\V}, invert, *-] (0, 2) 
+        -- (2, 2) 
+        to[R=\qty{50}{\ohm}, i=$I$] (2, 0) 
+        -- (0, 0) 
+        node[ground, rotate=-90] {};
+    \end{tikzpicture}
+} % resizebox
+
+    {\huge Bestäm strömmen $I$ ovan.}
+\end{center}
+\end{frame}
+
+\handoutnoteslide
+
+\begin{frame}\frametitle{Ohms lag och resistans}
 \resizebox{\textwidth}{!}{%
 \begin{minipage}{.5\textwidth}
 \centering
@@ -771,7 +826,9 @@ Bestäm strömmen $I$ ovan.
 \end{tikzpicture}\\
 Bestäm strömmen $I$ ovan.
 \end{minipage}}
-}
+\end{frame}
+
+\handoutnoteslide
 
 %%--------------------------------------------------
 %% Ny frame
@@ -809,6 +866,7 @@ Bestäm strömmen $I$ ovan.
   \end{columns}
 \end{frame}
 
+\handoutnoteslide
 
 %%--------------------------------------------------
 %% Ny frame
@@ -847,6 +905,11 @@ Bestäm strömmen $I$ ovan.
     }}
 \end{frame}
 
+\handoutnoteslide
+
+\descriptionslide{figures/kvl-exempel.png}{0.75}{Bestäm $U_1$}{}
+
+\handoutnoteslide
 
 %%--------------------------------------------------
 %% Ny frame
@@ -857,7 +920,7 @@ Bestäm strömmen $I$ ovan.
     \includegraphics[width=\textwidth]{figures/krets_qucs.png}
     \column{0.6\textwidth}
     \Large
-    \begin{itemize}[label=\alert{\textbullet}] % specificera label för
+    \begin{itemize} % specificera label för
     \item<1-> Laddning \alert{bevarad.}
     \item<1-> Strömmar går vidare (eller inte alls).
     \item<3-> \alert{\emph{In mot}} knut -- positiva
@@ -883,21 +946,162 @@ Bestäm strömmen $I$ ovan.
   \end{columns}
 \end{frame}
 
+\handoutnoteslide
 
-\frame{
-    \frametitle{}
-    \begin{tikzpicture}[remember picture,overlay]
-        \node[at=(current page.center)] {
-            \includegraphics[keepaspectratio,
-                                 width=\paperwidth,
-                                 height=\paperheight]{figures/simpson_valjare.JPG}
-            };
-    \end{tikzpicture}    
+\descriptionslide{figures/kcl-exempel.png}{0.5}{Bestäm $I$}{}
+
+\handoutnoteslide
+
+%% Nytt stuff HT2026 - introlabben från ET2010 som uppvärmning.
+
+\mode<beamer>{
+% Manualframsidor
+\begin{frame}[plain]
+  \centering
+  \includegraphics[height=\paperheight]{figures/dm858_manual_1stpage.png}\hfill
+  \includegraphics[height=\paperheight]{figures/dp900_manual_1stpage.png}
+\end{frame}
+
+
+% Manualframsidor
+\begin{frame}[plain]
+  \centering
+  \includegraphics[height=\paperheight]{figures/rohdemanual.png}\hfill
+  \includegraphics[height=\paperheight]{figures/siglentmanual.png}
+\end{frame}
+} % mode beamer slut
+
+
+% banankontakt och hemma-multimeter
+\begin{frame}[plain]
+  \centering
+  \includegraphics[height=\paperheight]{figures/banankontakt_ny.png}\hfill
+  \includegraphics[height=\paperheight]{figures/c04_dmm-3.6mA_prob.png}
+\end{frame}
+
+\handoutnoteslide
+
+\descriptionslide{figures/rigol_multimeter.png}{1}
+    {Bänkmultimeter Rigol DM838E}{}
+
+\descriptionslide{figures/dm858_sketch.png}{0.9}{}{}
+
+\descriptionslide{figures/rigol-input-voltage.png}{0.5}
+  {Koppla så här för att mäta spänning eller motstånd med Rigol DM838E. Ofarligt!}{}
+
+
+\mode<beamer>{
+  \descriptionslide{figures/rigol_multimeter.png}{0.9}{Mäta spänning.}{
+  \ringmarker{red}{0.67}{0.90}{0.45}
+}
+
+\descriptionslide{figures/rigol_multimeter.png}{0.9}{Mäta resistans.}{
+  \ringmarker{red}{0.78}{0.88}{0.45}
+}
+
+\descriptionslide{figures/rigol_multimeter.png}{0.9}{Mäta avbrott, ''pipa'' kretsen.}{
+  \ringmarker{red}{0.83}{0.90}{0.45}
+}
+} % mode beamer ends
+
+\mode<beamer>{
+\sectionslide{Nu säger vi alla i kör: \\[5mm] \pause{} Spänningsmätning och motståndsmätning\\[2mm] är relativt säkert.}
+\sectionslide{Labbets farligaste djur: Krokodilen!}
+} % end mode.
+
+\descriptionslide{figures/c04_krokodilerAlla.png}{1.0}
+    {Isolerade och oisolerade krokodilklämmor. \\ 
+    Undvik krokodilklämmor om det inte är absolut nödvändigt! \\ 
+    Använd \textit{bara} isolerade krokodilklämmor!}{}
+
+
+\mode<beamer>{
+\sectionslide{Kopplingsdäck, demoboard, breadboard.}
+
+\descriptionslide{figures/c04_breadboard_photo.png}{0.9}{Kopplingsdäck, breadboard.}{}
+
+\descriptionslide{figures/breadboard_connections.png}{1}{Kopplingarna \textit{inuti} breadboarden.}{}
+
+\descriptionslide{figures/c04_breadboar_with_resistor.png}{0.9}{Kopplingsdäck med komponent.\\ Komponenter hålls på plats med fjädrar,\\ bara ett ben i varje hål. Testa flytta runt\\ och sätt ut komponenter och \textit{jumper wires}.}{}
+
+\descriptionslide{figures/c04_probeTip.png}{1.0}{Probspets i hål mot komponentben.}{}
+
+\descriptionslide{figures/breadboard_tworesistors.png}{0.8}{Koppla upp två motstånd. Mät motståndet över ena och bägge. Mät kontakt (pip) i raden där bägge är inkopplade.}{}
+
+\descriptionslide{figures/breadboard_circuit_longWires.png}{1}{Koppling med långa jumper wires.}{}
+
+\descriptionslide{figures/breadboard_circuit_shortWires.png}{1}
+    {Koppling med korta jumper wires.}
+    {
+        \ringmarker{red}{0.6}{0.325}{1}
     }
 
+\descriptionslide{figures/fritzing.jpg}{1}{Koppla upp denna kretsen! (Strunta i batterierna.)}{}
+} % end beamer mode
 
+\descriptionslide{figures/fritzing.jpg}{2}{Koppla upp denna kretsen! (Strunta i batterierna.)\\Visa Pererik när ni är färdiga, förklara hur strömmen går.}{}
 
+\handoutnoteslide
 
+\mode<beamer>{
+%% Power supply och labbmatning
+\sectionslide{Labbmatning och labbspänningsaggregat.}
+} % end mode
+
+\descriptionslide{figures/dp932e.png}{1.2}{Spänningsaggregat, labbaggregat,\\ \textit{DC Power supply}. Denna har kraft\\ att förstöra och elda upp saker.\\ Iaktag försiktighet!}{}
+
+\descriptionslide{figures/dp932e_kontroller.png}{1}{Relevanta reglage.}{}
+
+\mode<beamer>{
+\descriptionslide{figures/dp932e_display.png}{1}{Ställ in spänningen till \qty{5}{\V} och justera strömbegränsningarna till \qty{50}{\mA} på alla kanaler.}{}
+} % end mode
+
+% Närbilder på skruvterminaler på breadboarden. Lossad och åtdragen.
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=south west, outer sep=0pt] at (current page.south west)
+      {\includegraphics[height=\paperheight]{figures/breadboard_unscrewed.png}};
+    \node[anchor=south east, outer sep=0pt] at (current page.south east)
+      {\only<2->{\includegraphics[height=\paperheight]{figures/breadboard_screwed.png}}};
+    \node[
+      anchor=north,
+      outer sep=0pt,
+      fill=black,
+      fill opacity=0.65,
+      text opacity=1,
+      text=white,
+      text width=0.88\paperwidth,
+      align=center,
+      inner xsep=0.25cm,
+      inner ysep=0.18cm,
+      font=\Large\bfseries
+    ] at (current page.north) {Skruvterminal -- lossad till vänster, åtdragen till höger.};
+  \end{tikzpicture}
+\end{frame}
+
+% bilden nedan kan göras bättre. Den kan fotograferas och klippas och göras till bilder med individuella steg.
+\descriptionslide{figures/breadboard_bananas.png}{0.75}{Koppla jumpercables från skruvterminalerna\\ på breadboarden till respektive power rail.\\ Koppla banankablar från skruvterminalerna\\ på breadboarden till power supply.\\ Se till så powersupply-kanalen är avstängd!}{}
+
+\mode<beamer>{
+\sectionslide{Ställ på den inkopplade kanalen.\\[4mm] Lyser LEDen?\\ Mät spänningen över LEDen.}
+
+\sectionslide{Mäta ström.}
+} % end mode
+
+\descriptionslide{figures/rigol-input-current.png}{0.5}{I detta läget \textit{kortsluter} multimetern --\\ alla kretsar måste \textit{brytas} för att kunna mätas.\\ Annars kortslutning och eldsvåda!}{}
+
+\descriptionslide{figures/rigol_multimeter.png}{1}{}{
+    \ringmarker{red}{0.76}{0.92}{0.45}
+}
+ 
+\descriptionslide{figures/fritzing.jpg}{1}{Koppla ur jumper wiren mellan power rail och LEDbenet (blå nedan). Röd multimeterprob mot LEDbenet och svart multimeterproben mot någon metallisk del av skruvterminalen. Mät strömmen som flyter genom LEDen.}{} 
+
+\handoutnoteslide
+
+\mode<beamer>{
+% Analogt instrument - omkopplare för olika mätområden
+\descriptionslide{figures/simpson_valjare.JPG}{0.9}{Börja alltid på största värdet!}{}
+} % end mode
 
 \frame{
     \frametitle{}
@@ -938,10 +1142,10 @@ Bestäm strömmen $I$ ovan.
 \centering
 \begin{tikzpicture}[scale = 1, american]
     \draw (0, 0) 
-    node[ground] {}
-    to[american voltage source=\qty{25}{\V}, invert] (0, 2) 
+    node[ground, rotate=-90] {}
+    to[american voltage source=\qty{10}{\V}, invert, *-] (0, 2) 
     -- (2, 2) 
-    to[R=\qty{50}{\ohm}, i=$I$] (2, 0)
+    to[R=\qty{470}{\ohm}, i=$I$] (2, 0)
 	-- (0, 0)
     ;
     \draw (2, 2) 
@@ -952,8 +1156,9 @@ Bestäm strömmen $I$ ovan.
 \end{tikzpicture}\\
 Spänning \alert{över} komponenter!
 \end{minipage}}
-För stort motstånd! Räkna \qty{0.25}{\W}!
 }
+
+\handoutnoteslide
 
 
 \frame{
@@ -963,12 +1168,12 @@ För stort motstånd! Räkna \qty{0.25}{\W}!
 \centering
 \begin{tikzpicture}[scale = 1, american]
     \draw (0, 0) 
-    node[ground] {}
-    to[american voltage source=\qty{25}{\V}, invert] (0, 2) 
+    node[ground, rotate=-90] {}
+    to[american voltage source=\qty{5}{\V}, invert, *-] (0, 2) 
     to[short, -*] (0.5, 2)
     to[ammeter,-*] (2.5, 2) 
     -- (3, 2)
-    to[R=\qty{50}{\ohm}, i=$I$] (3, 0)
+    to[R=\qty{470}{\ohm}, i=$I$] (3, 0)
 	-- (0, 0)
     ;
 %    \draw (2, 2) 
@@ -981,6 +1186,8 @@ Ström \alert{genom} komponenter!
 \end{minipage}}
 }
 
+\handoutnoteslide
+
 
 \frame{
 \frametitle{Mäta motstånd}
@@ -989,7 +1196,7 @@ Ström \alert{genom} komponenter!
 \centering
 \begin{tikzpicture}[scale = 1, american]
     \draw (2, 2) 
-    to[R=\qty{50}{\ohm}] (2, 0)
+    to[R=\qty{470}{\ohm}] (2, 0)
     ;
     \draw (2, 2) 
     to[short, -*] (3, 2)
@@ -999,9 +1206,11 @@ Ström \alert{genom} komponenter!
     to[short, *-] (2, 0)
     ;
 \end{tikzpicture}\\
-Koppla loss komponenter!
+Koppla loss komponenter för motståndsmätning!
 \end{minipage}}
 }
+
+\handoutnoteslide
 
 
 %%--------------------------------------------------
@@ -1061,7 +1270,7 @@ Koppla loss komponenter!
  ;
  \end{circuitikz}
  \column{0.7\textwidth}
-     \begin{itemize}[label=\alert{\textbullet}] % specificera label
+     \begin{itemize} % specificera label
        % beamer
      \item<2-> Spänningsdelning, strömmen $I=\frac{V_1}{R_1+R_2}$
        \item<3-> Spänning över $R_2$ blir då
@@ -1071,7 +1280,7 @@ Koppla loss komponenter!
  \end{itemize}
  \end{columns}
  \end{frame}
- 
+ \handoutnoteslide
  
 %%--------------------------------------------------
 %% Ny frame
@@ -1098,49 +1307,6 @@ Beräkna spänningen över \qty{200}{\ohm}-motståndet.\\
 \end{columns}
 \end{frame}
 
-
-
-\frame{
-\frametitle{}
-    {\Huge Dag 2 -- material!}
-}
-
-
-
-
-\frame{
-\frametitle{Så funkar ett vridspoleinstrument -- Simpson}
-    {\Huge Ett mätinstrument drar ström}
-}
-
-
-\frame{
-\frametitle{Så funkar ett vridspoleinstrument -- principen}
-    \includegraphics[width=\textwidth]{figures/stromslinga_i_magnetfalt.png}
-}
-
-\frame{
-\frametitle{Så funkar ett vridspoleinstrument -- ingnejörskonsten}
-    \includegraphics[width=0.45\textwidth]{figures/pmmc.png}
-    \onslide<2->{
-    \includegraphics[width=0.45\textwidth]{figures/pmmc_instrument.png}
-    }
-}
-
-\frame{
-\frametitle{Så funkar ett vridspoleinstrument -- kretsen}
-    \includegraphics[width=\textwidth]{figures/pmmc_circuit.png}
-}
-
-
-\frame{
-\frametitle{Så funkar ett vridspoleinstrument -- flera mätområden}
-    \includegraphics[width=0.8\textwidth, angle=2.5]{figures/pmmc_multirange.png}
-}
-
-
-\frame{
-\frametitle{Bygg ett vridspoleinsrument}
-}
+\handoutnoteslide
 
 \end{document}
