@@ -35,6 +35,27 @@
     samples=200,
   },
 }
+% dBuV spectrum plot for the worked example
+\pgfplotsset{
+  dbspec/.style={
+    width=13cm, height=4.2cm, axis lines=left,
+    xmin=100, xmax=125, ymin=-10, ymax=90,
+    xtick={100,105,...,125}, ytick={0,20,...,80},
+    xlabel={frequency [MHz]}, ylabel={level [dB$\mu$V]},
+    grid=major, grid style={black!10},
+    tick label style={font=\scriptsize}, label style={font=\footnotesize},
+  },
+}
+% theoretical levels of the example signal (inside an axis)
+\newcommand{\theorylines}{%
+  \foreach \f/\L in {104.03/80, 105.02/30, 111.53/60, 121.01/15} {
+    \edef\tmp{\noexpand\draw[black!60, densely dashed]
+      (axis cs:\f,-10) -- (axis cs:\f,\L);}
+    \tmp
+  }
+  \addplot[only marks, mark=o, mark size=2.2pt, black, thick]
+    coordinates {(104.03,80) (105.02,30) (111.53,60) (121.01,15)};
+}
 % Gaussian filter shape: centre #1, 6 dB bandwidth #2 (in axis units)
 \newcommand{\gauss}[2]{exp(-ln(4)*((x-#1)/(#2/2))^2)}
 
@@ -486,6 +507,332 @@ Probability that the stepped receiver sees the burst at all:
     \alert{1\,\%}
   \quad\text{vs.}\quad P_\text{FFT} = 100\,\%
 \]
+\end{frame}
+
+% ======================================================================
+% Worked example with simulated data (stepped_scan_vs_fft_data/)
+% ======================================================================
+\begin{frame}{Worked example: the signal we will measure}
+
+\begin{columns}[T]
+\begin{column}{0.44\textwidth}
+  \footnotesize
+  Four emissions in 100--125\,MHz, plus receiver noise (0\,dB$\mu$V in
+  120\,kHz):
+
+  \smallskip
+  \begin{tabular}{@{}llll@{}}
+    \toprule
+    & $f$ [MHz] & Level & Character \\
+    \midrule
+    \textbf{A} & 104.03 & 80\,dB$\mu$V & strong clock harmonic \\
+    \textbf{W} & 105.02 & 30\,dB$\mu$V & weak, 1\,MHz from A \\
+    \textbf{B} & 111.53 & 60\,dB$\mu$V & \alert{burst}: 5\,ms every 0.5\,s \\
+    \textbf{V} & 121.01 & 15\,dB$\mu$V & very weak \\
+    \bottomrule
+  \end{tabular}
+
+  \medskip
+  Each one is chosen to test something:
+  \begin{itemize}
+    \item A + W: spectral \textbf{leakage} / windowing
+    \item B: \textbf{intermittent} emission
+    \item A + V: \textbf{dynamic range}
+  \end{itemize}
+
+  \smallskip
+  \scriptsize Both methods are simulated sample by sample
+  (\texttt{stepped\_scan\_vs\_fft\_data/generate.py}).
+\end{column}
+\begin{column}{0.54\textwidth}
+  \begin{tikzpicture}
+    \begin{axis}[dbspec, width=7.6cm, height=4.4cm,
+                 title={\footnotesize Theoretical spectrum (the ``truth'')}]
+      \theorylines
+      \node[font=\scriptsize, anchor=west] at (axis cs:104.3,80) {A};
+      \node[font=\scriptsize, anchor=west] at (axis cs:105.3,30) {W};
+      \node[font=\scriptsize, anchor=west] at (axis cs:111.8,60) {B};
+      \node[font=\scriptsize, anchor=west] at (axis cs:121.3,15) {V};
+    \end{axis}
+  \end{tikzpicture}
+
+  \begin{tikzpicture}
+    \begin{axis}[width=7.6cm, height=2.2cm, axis lines=left,
+                 xmin=0, xmax=1.05, ymin=0, ymax=1.3,
+                 ytick=\empty, xtick={0,0.25,...,1},
+                 tick label style={font=\scriptsize},
+                 label style={font=\scriptsize},
+                 xlabel={time [s]}, ylabel={B on},
+                 title={\footnotesize Burst B is only on 1\,\% of the time},
+                 title style={yshift=-3pt}]
+      \addplot[sigc, very thick, const plot] coordinates
+        {(0,0) (0.12,1) (0.125,0) (0.62,1) (0.625,0) (1.05,0)};
+    \end{axis}
+  \end{tikzpicture}
+\end{column}
+\end{columns}
+
+\end{frame}
+
+% ======================================================================
+\begin{frame}{One FFT frame: 512 samples in 16\,$\mu$s}
+
+\centering
+\begin{tikzpicture}
+  \begin{axis}[width=13cm, height=4.2cm, axis lines=left,
+               xmin=0, xmax=16, ymin=-17, ymax=17,
+               xlabel={time [$\mu$s]}, ylabel={I sample [mV]},
+               tick label style={font=\scriptsize},
+               label style={font=\footnotesize},
+               legend style={font=\scriptsize, at={(1,1)}, anchor=south east,
+                             legend columns=2, draw=none, fill=none}]
+    \addplot[black!35, thin] table[x=t_us, y=I_mV]
+      {stepped_scan_vs_fft_data/frame_time.dat};
+    \addlegendentry{raw samples (rectangular window)}
+    \addplot[fftc, thick] table[x=t_us, y=Iw_mV]
+      {stepped_scan_vs_fft_data/frame_time.dat};
+    \addlegendentry{$\times$ Hann window}
+    \addplot[fftc, dashed, domain=0:16, samples=100]
+      {14.1*sin(deg(pi*x/16))^2};
+  \end{axis}
+\end{tikzpicture}
+
+\raggedright
+\small
+\begin{itemize}
+  \item $f_s = 32$\,MS/s (I/Q), centre 112.5\,MHz, $N = 512$
+        $\Rightarrow$ bins every 62.5\,kHz, RBW $\approx 125$\,kHz with Hann.
+  \item By eye you only see A (80\,dB$\mu$V = 14\,mV peak); W, B and V are
+        hidden in the waveform -- the FFT will separate them.
+  \item The \textbf{window} fades the record in and out, so the record
+        edges do not look like a sudden jump.
+\end{itemize}
+
+\end{frame}
+
+% ======================================================================
+\begin{frame}{The FFT of that frame: why the window matters}
+
+\centering
+\begin{tikzpicture}
+  \begin{axis}[dbspec, height=3.3cm, xlabel={}, xticklabels={},
+               title={\footnotesize Rectangular window (no window)},
+               title style={yshift=-4pt}]
+    \addplot[black!50, thin] table[x=f, y=L]
+      {stepped_scan_vs_fft_data/frame_rect.dat};
+    \theorylines
+    \node[font=\scriptsize, badc, anchor=west, align=left]
+      at (axis cs:113.5,65) {leakage skirt of A buries W and V};
+    \node[font=\scriptsize, badc, anchor=west]
+      at (axis cs:105.8,80) {A reads 76 instead of 80 (scalloping)};
+  \end{axis}
+\end{tikzpicture}
+
+\begin{tikzpicture}
+  \begin{axis}[dbspec, height=3.3cm,
+               title={\footnotesize Hann window}, title style={yshift=-4pt}]
+    \addplot[fftc, thin] table[x=f, y=L]
+      {stepped_scan_vs_fft_data/frame_hann.dat};
+    \theorylines
+    \node[font=\scriptsize, okc, anchor=west]
+      at (axis cs:113.5,65) {all four emissions at the right level};
+  \end{axis}
+\end{tikzpicture}
+
+\raggedright
+\small
+Circles = theoretical levels. The window turns every FFT bin into a clean
+\textbf{band-pass filter} ($\approx$ RBW) -- without it a strong signal
+``leaks'' into all bins. This frame happens to include burst B.
+\end{frame}
+
+% ======================================================================
+\begin{frame}{Where does each method look? (same 0.63\,s for both)}
+
+\centering
+\begin{tikzpicture}
+  \pgfplotsset{ft/.style={
+    width=6.6cm, height=4.8cm, axis lines=left,
+    xmin=0, xmax=0.7, ymin=100, ymax=125,
+    xtick={0,0.2,0.4,0.6}, ytick={100,105,...,125},
+    xlabel={time [s]}, ylabel={frequency [MHz]},
+    tick label style={font=\scriptsize}, label style={font=\footnotesize},
+    title style={font=\footnotesize, yshift=-3pt}}}
+  \begin{axis}[ft, title={\textcolor{stepc}{\textbf{Stepped}}: 626 steps $\times$ 1\,ms}]
+    \addplot[stepc, very thick] coordinates {(0,100) (0.626,125)};
+    \addplot[sigc, line width=3pt] coordinates {(0.12,111.53) (0.125,111.53)};
+    \addplot[sigc, line width=3pt] coordinates {(0.62,111.53) (0.625,111.53)};
+    \addplot[only marks, mark=o, mark size=3pt, badc, thick]
+      coordinates {(0.288,111.53)};
+    \node[font=\scriptsize, sigc, anchor=south] at (axis cs:0.12,112) {B};
+    \node[font=\scriptsize, badc, anchor=north west, align=left]
+      at (axis cs:0.30,111.3) {at 111.53\,MHz only\\ at $t\approx0.29$\,s:\\B is off $\Rightarrow$ missed};
+  \end{axis}
+\end{tikzpicture}
+\hfill
+\begin{tikzpicture}
+  \pgfplotsset{ft/.style={
+    width=6.6cm, height=4.8cm, axis lines=left,
+    xmin=0, xmax=0.7, ymin=100, ymax=125,
+    xtick={0,0.2,0.4,0.6}, ytick={100,105,...,125},
+    xlabel={time [s]}, ylabel={frequency [MHz]},
+    tick label style={font=\scriptsize}, label style={font=\footnotesize},
+    title style={font=\footnotesize, yshift=-3pt}}}
+  \begin{axis}[ft, title={\textcolor{fftc}{\textbf{FFT}}: 156\,000 overlapping frames}]
+    \addplot[fill=fftc!20, draw=fftc] coordinates
+      {(0,100) (0.626,100) (0.626,125) (0,125)} -- cycle;
+    \addplot[sigc, line width=3pt] coordinates {(0.12,111.53) (0.125,111.53)};
+    \addplot[sigc, line width=3pt] coordinates {(0.62,111.53) (0.625,111.53)};
+    \addplot[only marks, mark=o, mark size=3pt, okc, thick]
+      coordinates {(0.1225,111.53) (0.6225,111.53)};
+    \node[font=\scriptsize, okc, anchor=north west, align=left, fill=white]
+      at (axis cs:0.03,108.5) {every frequency, all the time\\
+      $\Rightarrow$ B caught (twice)};
+  \end{axis}
+\end{tikzpicture}
+
+\small
+Stepped: a thin diagonal line in the frequency--time plane.
+FFT: the whole rectangle.
+\end{frame}
+
+% ======================================================================
+\begin{frame}{Result: stepped scan (Peak, 1\,ms dwell, 40\,kHz steps)}
+
+\centering
+\begin{tikzpicture}
+  \begin{axis}[dbspec, height=5.4cm]
+    \addplot[stepc, thin] table[x=f, y=L]
+      {stepped_scan_vs_fft_data/stepped_1ms.dat};
+    \theorylines
+    \draw[-{Stealth}, badc, thick] (axis cs:114.5,48) -- (axis cs:111.8,12);
+    \node[font=\scriptsize, badc, anchor=west, align=left]
+      at (axis cs:114.3,52) {B \textbf{missed}: 8\,dB$\mu$V instead of 60\\
+      (receiver was here while B was off)};
+    \node[font=\scriptsize, okc, anchor=south, align=center]
+      at (axis cs:121.01,22) {V seen\\(18\,dB$\mu$V)};
+    \node[font=\scriptsize, okc, anchor=west] at (axis cs:105.4,32) {W seen};
+    \node[font=\scriptsize, black!70, anchor=west, align=left]
+      at (axis cs:100.2,-3) {low, clean noise floor $\approx 7$\,dB$\mu$V};
+  \end{axis}
+\end{tikzpicture}
+
+\raggedright
+\small
+Scan time: \textbf{626 steps $\times$ 1\,ms = 0.63\,s}. Only one narrow band
+reaches the detector at a time $\Rightarrow$ A does not disturb the
+measurement of V. No false signals. But the burst is simply not there.
+\end{frame}
+
+% ======================================================================
+\begin{frame}{Result: FFT scan (Hann, 75\,\% overlap, same 0.63\,s)}
+
+\centering
+\begin{tikzpicture}
+  \begin{axis}[dbspec, height=5.4cm,
+               legend columns=2, legend style={font=\scriptsize, at={(1,1.02)},
+                             anchor=south east, draw=none}]
+    \addplot[fftc, thin] table[x=f, y=L]
+      {stepped_scan_vs_fft_data/fft_peak.dat};
+    \addlegendentry{Peak (max-hold)}
+    \addplot[fftc!40, thin] table[x=f, y=L]
+      {stepped_scan_vs_fft_data/fft_avg.dat};
+    \addlegendentry{Average}
+    \theorylines
+    \node[font=\scriptsize, okc, anchor=west, align=left]
+      at (axis cs:112.2,70) {B \textbf{caught}: 59\,dB$\mu$V (Peak);\\
+      Average shows it is rare};
+    \node[font=\scriptsize, badc, anchor=west, align=left]
+      at (axis cs:114.0,47) {floor raised to $\approx 28$\,dB$\mu$V by the ADC\\
+      $\Rightarrow$ \textbf{V lost}, spurious lines};
+  \end{axis}
+\end{tikzpicture}
+
+\raggedright
+\small
+All 400 bins are observed \emph{the whole time}, and Peak and Average come for
+free from the same data. But A, V and the noise share \textbf{one ADC}: its
+full scale is set by A, so its quantisation noise and spurs spread over the
+whole segment. \scriptsize(ADC exaggerated to 6 bits to make the effect visible.)
+\end{frame}
+
+% ======================================================================
+\begin{frame}{Scorecard for the example}
+
+\centering
+\begin{tabular}{@{}llccc@{}}
+  \toprule
+  & & truth & \textcolor{stepc}{\textbf{Stepped, 1\,ms}}
+  & \textcolor{fftc}{\textbf{FFT}} \\
+  \midrule
+  A & strong CW    & 80 & 80 \plus & 79 \plus \\
+  W & weak, near A & 30 & 30 \plus & 34 (barely above floor) \\
+  B & burst        & 60 & \alert{8 -- missed} \minus & 59 \plus \\
+  V & very weak    & 15 & 18 \plus & \alert{lost in floor} \minus \\
+  \midrule
+  \multicolumn{2}{@{}l}{Noise floor (Peak)} & & $\approx 7$ & $\approx 28$ \\
+  \multicolumn{2}{@{}l}{False (spurious) lines} & & none \plus & some \minus \\
+  \multicolumn{2}{@{}l}{Average detector as well} & & new scan \minus & free \plus \\
+  \multicolumn{2}{@{}l}{Scan time} & & 0.63\,s & 0.63\,s \\
+  \bottomrule
+\end{tabular}
+
+\medskip
+\scriptsize All levels in dB$\mu$V, Peak detector.
+
+\bigskip
+\raggedright
+\small
+\textbf{Lesson:} with the same time budget, the stepped scan wins on
+\textbf{dynamic range and cleanliness}, the FFT scan wins on
+\textbf{probability of intercept}. Each weakness can be fixed -- at a price.
+\end{frame}
+
+% ======================================================================
+\begin{frame}{Fixing the weak spots -- and what it costs}
+
+\begin{columns}[T]
+\begin{column}{0.49\textwidth}
+  \centering
+  \textcolor{stepc}{\textbf{Stepped: dwell 500\,ms per step}}
+
+  \begin{tikzpicture}
+    \begin{axis}[dbspec, width=6.9cm, height=4.4cm]
+      \addplot[stepc, thin] table[x=f, y=L]
+        {stepped_scan_vs_fft_data/stepped_500ms.dat};
+      \theorylines
+      \node[font=\scriptsize, okc, anchor=west] at (axis cs:112.2,62) {B caught};
+    \end{axis}
+  \end{tikzpicture}
+
+  \small
+  Dwell $\ge$ burst period $\Rightarrow$ B is always seen.\\
+  Cost: $626 \times 0.5$\,s = \alert{5.2 minutes} instead of 0.63\,s
+  (500$\times$ slower).
+\end{column}
+\begin{column}{0.49\textwidth}
+  \centering
+  \textcolor{fftc}{\textbf{FFT: preselector removes $<$108\,MHz}}
+
+  \begin{tikzpicture}
+    \begin{axis}[dbspec, width=6.9cm, height=4.4cm]
+      \addplot[fftc, thin] table[x=f, y=L]
+        {stepped_scan_vs_fft_data/fft_presel_peak.dat};
+      \theorylines
+      \fill[black!10] (axis cs:100,-10) rectangle (axis cs:108,90);
+      \node[font=\scriptsize, black!60, align=center]
+        at (axis cs:104,45) {filtered\\away};
+      \node[font=\scriptsize, okc, anchor=south] at (axis cs:121.01,26) {V visible};
+    \end{axis}
+  \end{tikzpicture}
+
+  \small
+  Without A the ADC can be set more sensitive: floor drops, V appears.\\
+  Cost: more (narrower) segments, filter hardware, A must be measured in
+  its own segment.
+\end{column}
+\end{columns}
+
 \end{frame}
 
 % ======================================================================
